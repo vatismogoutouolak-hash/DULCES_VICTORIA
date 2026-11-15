@@ -72,6 +72,7 @@ async function videoCall(method, body, authorization) {
 }
 const oldPrivateKey = process.env.FIREBASE_PRIVATE_KEY;
 const oldClientEmail = process.env.FIREBASE_CLIENT_EMAIL;
+const oldVideoSecret = process.env.VIDEO_TOKEN_SECRET;
 try {
   delete process.env.FIREBASE_PRIVATE_KEY;
   delete process.env.FIREBASE_CLIENT_EMAIL;
@@ -79,6 +80,7 @@ try {
   assert.equal((await videoCall('GET', {})).statusCode, 405);
   process.env.FIREBASE_PRIVATE_KEY = 'fake-test-key-never-used';
   process.env.FIREBASE_CLIENT_EMAIL = 'fake@example.test';
+  process.env.VIDEO_TOKEN_SECRET = 'unit-test-secret-value-at-least-32-characters';
   assert.equal((await videoCall('POST', {})).statusCode, 401);
   for (const body of [{courseId:'../admin',lessonId:'valid'}, {courseId:'chantilly',lessonId:'../secret'}, {courseId:'chantilly',lessonId:123}, {}, null]) {
     assert.equal((await videoCall('POST', body, 'Bearer test')).statusCode, 400);
@@ -87,4 +89,31 @@ try {
 } finally {
   oldPrivateKey === undefined ? delete process.env.FIREBASE_PRIVATE_KEY : process.env.FIREBASE_PRIVATE_KEY = oldPrivateKey;
   oldClientEmail === undefined ? delete process.env.FIREBASE_CLIENT_EMAIL : process.env.FIREBASE_CLIENT_EMAIL = oldClientEmail;
+  oldVideoSecret === undefined ? delete process.env.VIDEO_TOKEN_SECRET : process.env.VIDEO_TOKEN_SECRET = oldVideoSecret;
+}
+
+const {signPlayback,verifyPlayback,safeAsset,rewriteManifest,authorizePlayback} = await import(pathToFileURL(path.join(root,'server/video-access.js')));
+try {
+  process.env.VIDEO_TOKEN_SECRET = 'unit-test-secret-value-at-least-32-characters';
+  const now = Date.now();
+  const payload = {uid:'student',courseId:'chantilly',lessonId:'genoise',path:'courses/chantilly/videos/master.m3u8',iat:now,exp:now+60_000};
+  const token = signPlayback(payload);
+  assert.deepEqual(verifyPlayback(token),payload);
+  assert.throws(()=>verifyPlayback(`${token}x`),/Jeton invalide/);
+  assert.throws(()=>verifyPlayback(signPlayback({...payload,exp:now-1})),/expirée/);
+  for(const asset of ['../secret.mp4','/private.ts','https://example.test/x.ts','a//b.ts','x/./b.ts','x%2fb.ts','x.js','']) assert.equal(safeAsset(asset),false,asset);
+  assert.equal(safeAsset('quality-720/segment_001.ts'),true);
+  const manifest = rewriteManifest('#EXTM3U\n#EXT-X-KEY:METHOD=AES-128,URI="key.key"\nsegment.ts\n','quality/index.m3u8',token);
+  assert.ok(manifest.includes('asset=quality%2Fkey.key'));
+  assert.ok(manifest.includes('asset=quality%2Fsegment.ts'));
+  assert.throws(()=>rewriteManifest('#EXTM3U\nhttps://example.test/a.ts','index.m3u8',token),/non autorisé/);
+  const services = (user,status,path=payload.path) => ({auth:{getUser:async()=>user},db:{doc:id=>({get:async()=>({data:()=>id.startsWith('enrollments/')?{status}:{videoPath:path}})})}});
+  await authorizePlayback(services({disabled:false},'approved'),payload);
+  await assert.rejects(authorizePlayback(services({disabled:true},'approved'),payload),/suspendu/);
+  await assert.rejects(authorizePlayback(services({disabled:false},'suspended'),payload),/suspendu/);
+  await assert.rejects(authorizePlayback(services({disabled:false,tokensValidAfterTime:new Date(now+1000).toISOString()},'approved'),payload),/suspendu/);
+  await assert.rejects(authorizePlayback(services({disabled:false},'approved','courses/chantilly/changed.m3u8'),payload),/suspendu/);
+  console.log('PASS: playback signature, expiry, path restrictions, HLS manifest rewriting, suspension, revocation and lesson-change authorization.');
+} finally {
+  oldVideoSecret === undefined ? delete process.env.VIDEO_TOKEN_SECRET : process.env.VIDEO_TOKEN_SECRET = oldVideoSecret;
 }
