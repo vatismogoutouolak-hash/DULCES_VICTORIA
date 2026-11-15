@@ -1,0 +1,16 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    function admin() { return request.auth != null && request.auth.token.admin == true; }
+    function enrolled(courseId) {
+      return request.auth != null && firestore.get(/databases/(default)/documents/enrollments/$(request.auth.uid + '_' + courseId)).data.status == 'approved';
+    }
+    match /courses/{courseId}/{file=**} {
+      allow read: if admin() || enrolled(courseId);
+      allow create,update: if admin() && request.resource.size < 1024 * 1024 * 1024
+        && request.resource.contentType.matches('video/.*|application/pdf');
+      allow delete: if admin();
+    }
+    match /{file=**} { allow read,write: if false; }
+  }
+}

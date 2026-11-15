@@ -1,0 +1,73 @@
+// Data model: enrollments/{uid_courseId}: uid (immutable string), courseId
+// (immutable enum), status (pending/approved/rejected/suspended), displayName <=100,
+// email <=254 (immutable), createdAt (immutable timestamp), updatedAt timestamp.
+// users/{uid}/progress/{courseId_lessonId}: courseId enum, lessonId <=80,
+// completed bool, updatedAt timestamp. courses/{id}/lessons/{id}: title <=160,
+// order integer 0..999, videoPath <=500 scoped to course, updatedAt timestamp.
+// No client-editable role documents. Authorization uses custom admin claim.
+// All other documents are inaccessible. Rules are a prototype pending emulator QA.
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function owner(uid) { return signedIn() && request.auth.uid == uid; }
+    function admin() { return signedIn() && request.auth.token.admin == true; }
+    function course(id) { return id in ['chantilly','creme-au-beurre','gateaux-en-pot']; }
+    function enrolled(id) {
+      return signedIn() && get(/databases/$(database)/documents/enrollments/$(request.auth.uid + '_' + id)).data.status == 'approved';
+    }
+    function validEnrollment(d, id) {
+      return d.keys().hasAll(['uid','courseId','status','displayName','email','createdAt','updatedAt'])
+        && d.keys().hasOnly(['uid','courseId','status','displayName','email','createdAt','updatedAt'])
+        && d.uid is string && d.uid.size() > 0 && d.uid.size() <= 128
+        && course(d.courseId) && id == d.uid + '_' + d.courseId
+        && d.status in ['pending','approved','rejected','suspended']
+        && d.displayName is string && d.displayName.size() <= 100
+        && d.email is string && d.email.size() <= 254
+        && d.createdAt is timestamp && d.updatedAt == request.time;
+    }
+    function validProgress(d, id) {
+      return d.keys().hasAll(['courseId','lessonId','completed','updatedAt'])
+        && d.keys().hasOnly(['courseId','lessonId','completed','updatedAt'])
+        && course(d.courseId) && d.lessonId is string && d.lessonId.matches('^[a-z0-9-]{1,80}$')
+        && id == d.courseId + '_' + d.lessonId
+        && d.completed is bool && d.updatedAt == request.time
+        && exists(/databases/$(database)/documents/courses/$(d.courseId)/lessons/$(d.lessonId));
+    }
+    function validLesson(d, courseId) {
+      return d.keys().hasAll(['title','order','videoPath','updatedAt'])
+        && d.keys().hasOnly(['title','order','videoPath','updatedAt'])
+        && d.title is string && d.title.size() > 0 && d.title.size() <= 160
+        && d.order is int && d.order >= 0 && d.order <= 999
+        && d.videoPath is string && d.videoPath.size() <= 500
+        && d.videoPath.matches('^courses/' + courseId + '/[a-zA-Z0-9_./-]+$')
+        && !d.videoPath.matches('.*[.][.].*') && d.updatedAt == request.time;
+    }
+    match /enrollments/{id} {
+      allow get: if signedIn() && (admin() || id == request.auth.uid + '_chantilly' || id == request.auth.uid + '_creme-au-beurre' || id == request.auth.uid + '_gateaux-en-pot');
+      allow list: if signedIn() && (resource.data.uid == request.auth.uid || admin());
+      allow create: if signedIn() && validEnrollment(request.resource.data,id)
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.email == request.auth.token.email
+        && request.resource.data.status == 'pending'
+        && request.resource.data.createdAt == request.time;
+      allow update: if admin() && validEnrollment(request.resource.data,id)
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status','updatedAt']);
+      allow delete: if false;
+    }
+    match /users/{uid}/progress/{id} {
+      allow read: if owner(uid);
+      allow create: if owner(uid) && validProgress(request.resource.data,id) && enrolled(request.resource.data.courseId);
+      allow update: if owner(uid) && validProgress(request.resource.data,id) && enrolled(request.resource.data.courseId)
+        && request.resource.data.courseId == resource.data.courseId
+        && request.resource.data.lessonId == resource.data.lessonId;
+      allow delete: if owner(uid);
+    }
+    match /courses/{courseId}/lessons/{lessonId} {
+      allow read: if admin() || enrolled(courseId);
+      allow create, update: if admin() && course(courseId) && lessonId.matches('^[a-z0-9-]{1,80}$') && validLesson(request.resource.data,courseId);
+      allow delete: if admin();
+    }
+    match /{document=**} { allow read,write: if false; }
+  }
+}
