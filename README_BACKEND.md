@@ -1,6 +1,6 @@
 # Backend Firebase — DULCES VICTORIA
 
-État: code préparé; aucun projet Firebase ou service distant n’a été provisionné ni validé dans cette session. Le site ne simule ni création de compte, ni paiement, ni accès payant lorsque Firebase n’est pas configuré.
+État au 15 novembre 2026: projet Firebase `dulces-victoria-7cf8f` créé sans Google Analytics; application web enregistrée; connexion Email/Password activée; domaine `dulces-victoria.vercel.app` autorisé; Firestore Standard `(default)` créé en `europe-west1` (Belgique), règles privées publiées. Configuration web ajoutée à Vercel. Tests distants: création de compte, connexion et suppression du compte de test réussies; lecture des données d’un autre utilisateur refusée. Storage reste indisponible car Firebase exige le forfait Blaze avec facturation. Compte administrateur et secrets serveur de diffusion restent à configurer avant ouverture des vidéos.
 
 ## Activation
 
@@ -21,4 +21,4 @@
 
 Le contrôle de session unique n’est pas implémenté. Le jeton temporaire et le filigrane dissuadent le partage sans empêcher l’enregistrement d’écran. La révocation ne retire pas les segments déjà téléchargés. Le lecteur HLS et le proxy ont été contrôlés statiquement; aucun fichier vidéo privé réel n’a pu être diffusé sans configuration Firebase. Aucun prestataire de paiement n’est configuré. Les prix, vidéos, durées et pièces légales définitives restent à fournir/valider.
 
-Règles de sécurité préparées à l’état de prototype: séparation des données privées, schéma strict, accès par propriétaire, custom claims administrateur et refus par défaut. La revue logique couvre accès public, usurpation UID, élévation de privilège, champs supplémentaires, tailles et timestamps. Les règles n’ont pas pu être compilées ni exécutées contre un projet authentifié; une validation émulateur et une revue sont nécessaires avant ouverture des inscriptions.
+Règles de sécurité préparées à l’état de prototype: séparation des données privées, schéma strict, accès par propriétaire, custom claims administrateur et refus par défaut. La revue logique couvre accès public, usurpation UID, élévation de privilège, champs supplémentaires, tailles et timestamps. Les règles ont été compilées et publiées par la console Firebase. Une validation émulateur complète et des essais avec rôles administrateur et apprenant restent nécessaires avant ouverture commerciale.

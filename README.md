@@ -13,7 +13,7 @@ Frontend HTML/CSS/JavaScript natif, navigation par URL fragment, sans compilatio
 
 ## État de livraison
 
-Le catalogue reprend les programmes fournis par le client. Les tarifs, durées, coordonnées, conditions commerciales définitives et vidéos n’ont pas été fournis. Aucun achat ni résultat d’apprentissage n’est simulé. L’ouverture des comptes et des accès attend la configuration d’un projet Firebase dédié et la validation de ses règles en émulateur.
+Le catalogue reprend les programmes fournis par le client. Les tarifs, durées, coordonnées, conditions commerciales définitives et vidéos n’ont pas été fournis. Aucun achat ni résultat d’apprentissage n’est simulé. Le projet Firebase dédié `dulces-victoria-7cf8f` est créé sans Analytics. Email/Password et Firestore Belgique sont configurés; règles privées publiées. La diffusion vidéo exige encore le forfait Blaze, le stockage, les secrets serveur, le compte administrateur et les vidéos de test.
 
 Les demandes d’inscription sont vérifiées manuellement après accord commercial externe. Aucun encaissement intégré n’est activé. Le lecteur prend en charge MP4 et HLS avec proxy privé, jetons courts, contrôle des accès à chaque segment et filigrane visuel. La lecture réelle et les règles Firebase attendent un projet configuré et des vidéos de test. La limitation à une session et les sauvegardes automatisées ne sont pas implémentées.
 
