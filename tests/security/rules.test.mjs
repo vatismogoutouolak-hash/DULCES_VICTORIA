@@ -46,3 +46,53 @@ test('student queries scoped own active enrollments; cross-user lists denied',as
  await assertFails(getDocs(collection(d,'enrollments')));
  await assertFails(getDocs(query(collection(d,'enrollments'),where('userId','==','alice'))));
 });
+
+const cmsValue = uid => ({
+ pages: {home: '{}', student: '{}', admin: '{}'},
+ theme: {cocoa: '#38231e', terra: '#b86f4d'},
+ updatedBy: uid, updatedAt: serverTimestamp()
+});
+test('only active administrators write CMS drafts and published content',async()=>{
+ const d=db('admin');
+ for(const id of ['draft','published']) {
+  await assertFails(setDoc(doc(env.unauthenticatedContext().firestore(),'siteContent',id),cmsValue('admin')));
+  await assertFails(setDoc(doc(db('bob'),'siteContent',id),cmsValue('bob')));
+  await assertSucceeds(setDoc(doc(d,'siteContent',id),cmsValue('admin')));
+ }
+ await assertFails(setDoc(doc(d,'siteContent/private'),cmsValue('admin')));
+ await env.withSecurityRulesDisabled(async c=>{
+  await setDoc(doc(c.firestore(),'users/suspended-admin'),{status:'suspended'});
+  await setDoc(doc(c.firestore(),'admins/suspended-admin'),{source:'test'});
+ });
+ await assertFails(setDoc(doc(db('suspended-admin'),'siteContent/draft'),cmsValue('suspended-admin')));
+});
+test('published CMS is public while drafts and collection queries stay private',async()=>{
+ const {collection,getDocs}=await import('firebase/firestore');
+ const d=db('admin'), anonymous=env.unauthenticatedContext().firestore();
+ await assertSucceeds(setDoc(doc(d,'siteContent/published'),cmsValue('admin')));
+ await assertSucceeds(setDoc(doc(d,'siteContent/draft'),cmsValue('admin')));
+ await assertSucceeds(getDoc(doc(anonymous,'siteContent/published')));
+ await assertFails(getDoc(doc(anonymous,'siteContent/draft')));
+ await assertFails(getDoc(doc(db('bob'),'siteContent/draft')));
+ await assertSucceeds(getDoc(doc(d,'siteContent/draft')));
+ await assertFails(getDocs(collection(anonymous,'siteContent')));
+ await assertFails(getDocs(collection(db('bob'),'siteContent')));
+});
+test('CMS create and update enforce bounded schema, colors and editor identity',async()=>{
+ const d=db('admin'), value=cmsValue('admin');
+ const invalid=[
+  {...value,updatedBy:'bob'},
+  {...value,updatedAt:new Date(0)},
+  {...value,extra:'unrecognized'},
+  {...value,pages:{home:'{}',student:'{}'}},
+  {...value,pages:{...value.pages,private:'{}'}},
+  {...value,pages:{...value.pages,home:25}},
+  {...value,pages:{...value.pages,home:'x'.repeat(250001)}},
+  {...value,theme:{cocoa:'url(javascript:alert(1))'}},
+  {...value,theme:{...value.theme,arbitrary:'red'}},
+ ];
+ for(const bad of invalid) await assertFails(setDoc(doc(d,'siteContent/draft'),bad));
+ await assertSucceeds(setDoc(doc(d,'siteContent/draft'),value));
+ for(const bad of invalid) await assertFails(updateDoc(doc(d,'siteContent/draft'),bad));
+ await assertSucceeds(updateDoc(doc(d,'siteContent/draft'),{pages:{home:'{"title":"Nouveau titre"}',student:'{}',admin:'{}'},updatedBy:'admin',updatedAt:serverTimestamp()}));
+});
