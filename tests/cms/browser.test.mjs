@@ -98,3 +98,16 @@ test('messages from an unrelated same-origin frame cannot modify the preview',as
  await delay(120);
  assert.equal(await frame.title(),snapshot.title);
 });
+
+test('malformed preview data cannot crash rendering or create active content',async()=>{
+ const failures=[];const capture=e=>failures.push(e.message);page.on('pageerror',capture);
+ try {
+  await apply({hidden:25,order:'invalid',logo:{url:'javascript:alert(1)'},blocks:[null,25,[],{title:'Valide',text:'Texte conservé',image:{url:'bad'},link:{url:'bad'}}]});
+  assert.equal(await frame.locator('[data-cms-block] h2').textContent(),'Valide');
+  assert.equal(await frame.locator('[data-cms-block] img,[data-cms-block] a').count(),0);
+  await page.evaluate(()=>document.querySelector('#test-preview').contentWindow.postMessage({type:'dv-cms-apply',value:null},location.origin));
+  await delay(120);
+  assert.equal(await frame.title(),snapshot.title);
+  assert.deepEqual(failures,[]);
+ } finally {page.off('pageerror',capture);await apply();}
+});
