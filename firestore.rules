@@ -32,6 +32,56 @@ service cloud.firestore {
     && str(d.userId,128) && str(d.courseId,128) && id == d.userId + '_' + d.courseId && d.status in ['active','revoked']
     && exists(/databases/$(database)/documents/users/$(d.userId)) && exists(/databases/$(database)/documents/courses/$(d.courseId)) && d.createdAt is timestamp && d.updatedAt == request.time;
   }
+  // siteContent/{draft|published}: JSON page overrides (home/student/admin),
+  // four optional hex theme colors, authenticated editor and server timestamp.
+  // Only the published document is public; no other CMS documents are addressable.
+  function cmsColor(d,key) {
+   return !(key in d) || (d[key] is string && d[key].matches('^#[a-fA-F0-9]{6} { allow get: if own(uid); allow list,write: if false; }
+  match /users/{uid} {
+   allow read: if own(uid) || admin();
+   allow create: if own(uid) && userValid(request.resource.data) && request.resource.data.email == request.auth.token.email && request.resource.data.role == 'student' && request.resource.data.status == 'active' && request.resource.data.createdAt == request.time;
+   allow update: if userValid(request.resource.data) && request.resource.data.createdAt == resource.data.createdAt && request.resource.data.email == resource.data.email && request.resource.data.role == resource.data.role && (admin() || (own(uid) && active() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['name','telephone','country','updatedAt'])));
+  }
+  match /courses/{cid} {
+   allow read: if resource.data.status == 'published' || admin();
+   allow create: if admin() && courseValid(request.resource.data) && request.resource.data.createdAt == request.time;
+   allow update: if admin() && courseValid(request.resource.data) && request.resource.data.createdAt == resource.data.createdAt;
+   match /lessons/{lid} {
+    allow read: if admin() || enrolled(cid);
+    allow create: if admin() && exists(/databases/$(database)/documents/courses/$(cid)) && lessonValid(request.resource.data) && request.resource.data.createdAt == request.time;
+    allow update: if admin() && lessonValid(request.resource.data) && request.resource.data.createdAt == resource.data.createdAt;
+    allow delete: if admin();
+   }
+  }
+  match /enrollments/{id} {
+   allow read: if admin() || (active() && resource.data.userId == request.auth.uid);
+   allow create: if admin() && enrollmentValid(request.resource.data,id) && request.resource.data.createdAt == request.time;
+   allow update: if admin() && enrollmentValid(request.resource.data,id) && request.resource.data.createdAt == resource.data.createdAt && request.resource.data.userId == resource.data.userId && request.resource.data.courseId == resource.data.courseId;
+  }
+ }
+}
+));
+  }
+  function siteContentValid(d) {
+   return d.keys().hasAll(['pages','theme','updatedAt','updatedBy'])
+    && d.keys().hasOnly(['pages','theme','updatedAt','updatedBy'])
+    && d.pages is map && d.pages.keys().hasAll(['home','student','admin'])
+    && d.pages.keys().hasOnly(['home','student','admin'])
+    && d.pages.home is string && d.pages.home.size() <= 250000
+    && d.pages.student is string && d.pages.student.size() <= 250000
+    && d.pages.admin is string && d.pages.admin.size() <= 250000
+    && d.theme is map && d.theme.keys().hasOnly(['cocoa','terra','cream','ink'])
+    && cmsColor(d.theme,'cocoa') && cmsColor(d.theme,'terra')
+    && cmsColor(d.theme,'cream') && cmsColor(d.theme,'ink')
+    && str(d.updatedBy,128) && d.updatedBy == request.auth.uid
+    && d.updatedAt == request.time;
+  }
+  match /siteContent/{id} {
+   allow get: if id == 'published' || (id == 'draft' && admin());
+   allow list: if admin();
+   allow create, update: if id in ['draft','published'] && admin() && siteContentValid(request.resource.data);
+   allow delete: if id in ['draft','published'] && admin();
+  }
   match /admins/{uid} { allow get: if own(uid); allow list,write: if false; }
   match /users/{uid} {
    allow read: if own(uid) || admin();
