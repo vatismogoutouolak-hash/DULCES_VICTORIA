@@ -1,4 +1,5 @@
-import {createHmac,timingSafeEqual} from 'node:crypto';
+import {createHmac,timingSafeEqual,randomBytes,createHash} from 'node:crypto';
+import {createLocalStorage} from './local-storage.js';
 let services;
 export async function getServices() {
   if (!services) services = (async () => {
@@ -6,7 +7,7 @@ export async function getServices() {
       import('firebase-admin/app'), import('firebase-admin/auth'), import('firebase-admin/firestore'), import('firebase-admin/storage')
     ]);
     const app = getApps()[0] || initializeApp({ credential:cert({projectId:process.env.FIREBASE_PROJECT_ID,clientEmail:process.env.FIREBASE_CLIENT_EMAIL,privateKey:process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g,'\n')}), storageBucket:process.env.FIREBASE_STORAGE_BUCKET });
-    return { auth:getAuth(app), db:getFirestore(app), storage:getStorage(app) };
+    return { auth:getAuth(app), db:getFirestore(app), storage:process.env.VIDEO_STORAGE==='local'?createLocalStorage():getStorage(app) };
   })();
   return services;
 }
@@ -44,4 +45,35 @@ export function rewriteManifest(source,asset,token) {
     if(line.startsWith('#')) return line.replace(/URI="([^"]+)"/g,(_,uri)=>`URI="${url(uri)}"`);
     return line.trim()?url(line.trim()):line;
   }).join('\n');
+}
+
+const SESSION_COOKIE='dv_playback_session';
+function sessionValue(req){
+  const parts=String(req.headers.cookie || '').split(';').map(p=>p.trim());
+  const value=parts.find(p=>p.startsWith(SESSION_COOKIE+'='))?.slice(SESSION_COOKIE.length+1);
+  if(!value || value.length>1000)return null;
+  const [body,sig,...rest]=value.split('.');
+  if(rest.length || !body || !sig)return null;
+  const expected=createHmac('sha256',secret()).update('session:'+body).digest();
+  const actual=Buffer.from(sig,'base64url');
+  if(actual.length!==expected.length || !timingSafeEqual(actual,expected))return null;
+  try{const payload=JSON.parse(Buffer.from(body,'base64url').toString());return typeof payload.id==='string' && /^[a-f0-9]{64}$/.test(payload.id) && payload.exp>Date.now()?payload:null;}catch{return null;}
+}
+export function bindPlaybackSession(req,res){
+  if(process.env.VIDEO_STORAGE!=='local' && process.env.HOSTINGER_MODE!=='true')return undefined;
+  let session=sessionValue(req);
+  if(!session){
+    session={id:randomBytes(32).toString('hex'),exp:Date.now()+24*60*60*1000};
+    const body=Buffer.from(JSON.stringify(session)).toString('base64url');
+    const sig=createHmac('sha256',secret()).update('session:'+body).digest('base64url');
+    res.setHeader('Set-Cookie',`${SESSION_COOKIE}=${body}.${sig}; Path=/api; Max-Age=86400; HttpOnly; Secure; SameSite=Strict`);
+  }
+  return createHash('sha256').update(session.id).digest('hex');
+}
+export function validPlaybackSession(req,payload){
+  if(process.env.VIDEO_STORAGE!=='local' && process.env.HOSTINGER_MODE!=='true')return true;
+  const session=sessionValue(req);
+  if(!session || typeof payload.session!=='string')return false;
+  const actual=createHash('sha256').update(session.id).digest('hex');
+  return actual===payload.session;
 }

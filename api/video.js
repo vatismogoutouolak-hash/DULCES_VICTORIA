@@ -1,4 +1,4 @@
-import {getServices,signPlayback} from '../server/video-access.js';
+import {getServices,signPlayback,bindPlaybackSession} from '../server/video-access.js';
 export default async function handler(req,res) {
   res.setHeader('Cache-Control','private, no-store');
   res.setHeader('X-Content-Type-Options','nosniff');
@@ -18,7 +18,7 @@ export default async function handler(req,res) {
     const path=lesson.data()?.videoPath;
     if(typeof path!=='string' || !path.startsWith(`courses/${courseId}/`) || path.includes('..') || !/\.(mp4|m3u8)$/i.test(path)) return res.status(404).json({error:'Vidéo indisponible.'});
     const iat=Date.now(),expiresAt=iat+15*60*1000;
-    const playback=signPlayback({uid:identity.uid,courseId,lessonId,path,iat,exp:expiresAt});
+    const playback=signPlayback({uid:identity.uid,courseId,lessonId,path,iat,exp:expiresAt,session:bindPlaybackSession(req,res)});
     const asset=path.slice(path.lastIndexOf('/')+1);
     return res.status(200).json({url:`/api/stream?token=${encodeURIComponent(playback)}&asset=${encodeURIComponent(asset)}`,type:/\.m3u8$/i.test(path)?'hls':'mp4',expiresAt,watermark:identity.email || identity.uid});
   } catch {return res.status(503).json({error:'La vidéo est momentanément indisponible. Réessayez dans quelques instants.'});}

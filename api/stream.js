@@ -1,4 +1,4 @@
-import {getServices,verifyPlayback,authorizePlayback,safeAsset,rewriteManifest} from '../server/video-access.js';
+import {getServices,verifyPlayback,authorizePlayback,safeAsset,rewriteManifest,validPlaybackSession} from '../server/video-access.js';
 const TYPES={m3u8:'application/vnd.apple.mpegurl',ts:'video/mp2t',m4s:'video/iso.segment',mp4:'video/mp4',aac:'audio/aac',key:'application/octet-stream',vtt:'text/vtt'};
 export default async function handler(req,res) {
   res.setHeader('Cache-Control','private, no-store');
@@ -8,6 +8,7 @@ export default async function handler(req,res) {
   const {token,asset}=req.query || {};
   let payload;
   try {payload=verifyPlayback(token);} catch {return res.status(401).json({error:'Session vidéo expirée. Relancez la lecture.'});}
+  if(!validPlaybackSession(req,payload))return res.status(403).json({error:'Relancez la vidéo depuis votre espace personnel.'});
   if(!safeAsset(asset)) return res.status(400).json({error:'Segment invalide.'});
   try {
     const s=await getServices();

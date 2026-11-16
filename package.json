@@ -3,7 +3,16 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "scripts": {"test": "node tests/verify.mjs"},
-  "engines": {"node": "24.x"},
-  "dependencies": {"firebase-admin": "^13.6.0"}
+  "scripts": {
+    "test": "node tests/verify.mjs",
+    "build": "node scripts/build.mjs",
+    "start": "node server/hostinger.mjs",
+    "test:hostinger": "node tests/hostinger.mjs"
+  },
+  "engines": {
+    "node": "24.x"
+  },
+  "dependencies": {
+    "firebase-admin": "^13.6.0"
+  }
 }
