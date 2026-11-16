@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="DULCES VICTORIA — Apprenez la pâtisserie grâce à des formations vidéo guidées, accessibles dans votre espace étudiant.">
+  <meta name="theme-color" content="#38231e">
+  <title>DULCES VICTORIA — L'école vidéo de pâtisserie</title>
+  <style>
+    :root{
+      --ink:#2e211d;--ink-soft:#6f5d55;--cream:#fbf7f1;--paper:#fffdf9;--sand:#f0e6d9;
+      --cocoa:#38231e;--cocoa-2:#52372e;--terra:#b86f4d;--gold:#d5ad77;--line:#e9ded2;
+      --shadow:0 22px 65px rgba(55,35,29,.12);--radius:24px;--max:1180px;
+    }
+    *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:95px}body{margin:0;background:var(--cream);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased}
+    a{color:inherit;text-decoration:none}button,input{font:inherit}button{cursor:pointer}img{max-width:100%;display:block}.container{width:min(var(--max),calc(100% - 48px));margin-inline:auto}
+    .announcement{background:var(--cocoa);color:#f8eee4;text-align:center;padding:9px 18px;font-size:12px;letter-spacing:.04em}.announcement a{color:#e5bd8b;margin-left:10px;font-weight:700;white-space:nowrap}
+    .site-header{position:sticky;top:0;z-index:20;background:rgba(251,247,241,.94);backdrop-filter:blur(16px);border-bottom:1px solid rgba(92,65,53,.1)}.header-inner{height:82px;display:flex;align-items:center;justify-content:space-between;gap:28px}
+    .brand{display:inline-flex;align-items:center;min-width:220px}.brand-name{font-family:Georgia,serif;font-size:21px;letter-spacing:.065em;line-height:1.05}.brand-name b{font-weight:700;color:var(--terra)}.brand-name small{display:block;font:700 8px/1.7 Inter,system-ui,sans-serif;letter-spacing:.2em;color:#8b776a;margin-top:6px}
+    .main-nav{display:flex;align-items:center;gap:30px}.main-nav a{font-size:12px;font-weight:650;color:#5e4b42;transition:color .2s}.main-nav a:hover{color:var(--terra)}.header-actions{display:flex;align-items:center;gap:10px}.menu-toggle{display:none;border:0;background:transparent;color:var(--cocoa);font-size:25px;padding:8px}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:12px;border:1px solid transparent;border-radius:999px;padding:12px 20px;font-weight:700;font-size:12px;letter-spacing:.01em;transition:transform .2s,background .2s,border-color .2s}.btn:hover{transform:translateY(-2px)}.btn-dark{background:var(--cocoa);color:#fffaf4}.btn-dark:hover{background:var(--cocoa-2)}.btn-outline{background:transparent;border-color:#b9a79a;color:var(--cocoa)}.btn-outline:hover{border-color:var(--cocoa);background:#fffaf4}.btn-light{background:#fff9f1;color:var(--cocoa)}.btn-quiet{background:transparent;color:var(--cocoa);padding-inline:13px}.btn-large{padding:16px 24px;font-size:13px}
+    .hero{padding:68px 0 75px;overflow:hidden}.hero-grid{display:grid;grid-template-columns:1fr .92fr;align-items:center;gap:65px}.eyebrow{display:flex;align-items:center;gap:10px;margin:0 0 18px;color:var(--terra);font-size:10px;font-weight:800;letter-spacing:.19em;text-transform:uppercase}.eyebrow:before{content:"";display:block;width:27px;height:1px;background:var(--terra)}
+    h1,h2,h3,p{margin-top:0}h1,h2{font-family:Georgia,"Times New Roman",serif;font-weight:400;letter-spacing:-.04em}h1{font-size:clamp(48px,5.8vw,76px);line-height:1.02;margin:0 0 22px;color:var(--cocoa)}h1 em,h2 em{font-weight:400;color:var(--terra)}.hero-intro{max-width:510px;color:var(--ink-soft);font-size:15px;line-height:1.9;margin-bottom:30px}.hero-buttons{display:flex;flex-wrap:wrap;gap:12px}.hero-note{display:flex;align-items:center;gap:12px;margin-top:35px;color:#725e53;font-size:11px}.hero-note .note-icon{width:36px;height:36px;border:1px solid #d8c6b5;border-radius:50%;display:grid;place-items:center;color:var(--terra);font-size:16px}.hero-note strong{display:block;color:var(--cocoa);font-size:12px}.hero-note small{display:block;color:#8a786e;font-size:10px;margin-top:2px}
+    .hero-visual{position:relative;min-height:500px}.hero-photo{position:absolute;inset:0 28px 0 48px;border-radius:48% 48% 22px 22px/38% 38% 22px 22px;background:linear-gradient(180deg,rgba(40,24,20,.02),rgba(40,24,20,.24)),url('https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=1200&q=85') center/cover;box-shadow:var(--shadow)}.photo-caption{position:absolute;left:0;bottom:35px;background:var(--paper);border:1px solid rgba(90,63,50,.09);padding:17px 20px;border-radius:15px;box-shadow:0 12px 35px rgba(55,35,29,.12);max-width:225px}.photo-caption span{font-family:Georgia,serif;color:var(--terra);font-size:25px;display:block;line-height:1}.photo-caption strong{font-size:12px;display:block;margin-top:8px}.photo-caption small{color:#88766b;font-size:10px}.round-stamp{position:absolute;right:0;top:38px;width:105px;height:105px;border-radius:50%;background:#e7c99f;color:var(--cocoa);display:grid;place-items:center;text-align:center;font-family:Georgia,serif;font-size:11px;line-height:1.25;transform:rotate(9deg);border:1px solid rgba(70,44,34,.12)}
+    .benefits{background:#f0e7dc;border-block:1px solid #e7d9ca}.benefit-grid{display:grid;grid-template-columns:repeat(4,1fr)}.benefit{padding:23px 19px;display:flex;gap:13px;align-items:center;border-right:1px solid #dfd0c1}.benefit:last-child{border:0}.benefit-number{font-family:Georgia,serif;font-size:24px;color:var(--terra)}.benefit strong{display:block;font-size:11px;color:var(--cocoa)}.benefit small{font-size:10px;color:#88776d}
+    .section{padding:96px 0}.section-head{display:flex;align-items:end;justify-content:space-between;gap:36px;margin-bottom:36px}.section-head h2,.method-copy h2,.faq-intro h2{font-size:clamp(37px,4.5vw,55px);line-height:1.1;margin:0}.section-description{max-width:380px;color:var(--ink-soft);font-size:13px;line-height:1.9;margin:0 0 5px}
+    .catalog-shell{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:36px;box-shadow:0 10px 35px rgba(55,35,29,.04)}.catalog-top{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:25px}.filters{display:flex;gap:8px;flex-wrap:wrap}.filter{border:1px solid #e4d8cc;background:#fff;color:#725e53;border-radius:999px;padding:9px 15px;font-size:11px;font-weight:700}.filter.active,.filter:hover{background:var(--cocoa);color:#fff;border-color:var(--cocoa)}.search{display:flex;align-items:center;gap:9px;border:1px solid #e4d8cc;border-radius:999px;background:#fff;padding:0 14px;min-width:min(100%,250px)}.search span{color:var(--terra);font-size:18px}.search input{width:100%;border:0;outline:0;background:transparent;padding:10px 0;font-size:11px;color:var(--ink)}.empty-state{text-align:center;padding:50px 20px 42px;border:1px dashed #d9c9b9;border-radius:18px;background:linear-gradient(135deg,#fffdf9,#f9f0e6)}.empty-icon{margin:0 auto 16px;width:54px;height:54px;border-radius:50%;display:grid;place-items:center;background:#efe1d1;color:var(--terra);font-size:25px}.empty-state h3{font-family:Georgia,serif;font-size:27px;font-weight:400;margin-bottom:8px}.empty-state p{max-width:530px;margin:0 auto 20px;color:#806d62;font-size:12px;line-height:1.8}.catalog-footnote{margin:19px 0 0;color:#938176;font-size:10px;text-align:center}
+    .method{display:grid;grid-template-columns:1fr 1fr;min-height:550px;background:var(--cocoa);color:#f9f1e7}.method-photo{min-height:500px;background:linear-gradient(0deg,rgba(38,23,19,.2),rgba(38,23,19,.05)),url('https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=1200&q=85') center/cover}.method-copy{padding:70px clamp(35px,7vw,105px);align-self:center}.method-copy .eyebrow{color:#dfb98b}.method-copy .eyebrow:before{background:#dfb98b}.method-copy h2{color:#fff8ef;margin-bottom:18px}.method-copy h2 em{color:#e0b88e}.method-copy>p:not(.eyebrow){color:#d4c4b8;font-size:13px;line-height:1.9;margin-bottom:26px}.method-step{display:flex;gap:15px;padding:14px 0;border-top:1px solid rgba(255,255,255,.15)}.method-step>span{font:italic 20px Georgia,serif;color:#d6ad7e}.method-step strong{font-size:12px}.method-step p{font-size:11px;color:#c6b4a8;margin:3px 0 0}.method-copy .btn{margin-top:20px}
+    .access-section{background:#f2e8dc}.access-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:60px;align-items:start}.access-intro h2{font-size:clamp(36px,4vw,50px);line-height:1.1;margin-bottom:15px}.access-intro>p:last-child{color:#7c695e;font-size:13px;line-height:1.9;max-width:370px}.access-steps{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:28px 32px}.access-step{display:grid;grid-template-columns:42px 1fr;gap:15px;padding:16px 0;border-bottom:1px solid var(--line)}.access-step:last-child{border:0}.step-no{width:35px;height:35px;border-radius:50%;background:#f0e1d1;color:var(--terra);display:grid;place-items:center;font-family:Georgia,serif}.access-step strong{font-size:12px}.access-step p{font-size:11px;color:#806d62;margin:4px 0 0;line-height:1.7}
+    .testimonials{padding:85px 0;text-align:center}.testimonials .eyebrow{justify-content:center}.testimonials .eyebrow:before{display:none}.testimonials h2{font-size:43px;line-height:1.12;margin-bottom:14px}.testimonials p{max-width:560px;margin:0 auto;color:#806d62;font-size:12px;line-height:1.9}.testimonial-note{display:inline-block;margin-top:24px;padding:9px 14px;border:1px solid var(--line);border-radius:999px;color:#8a766a;font-size:10px}
+    .cta{padding:62px 0;background:var(--terra);color:white;position:relative;overflow:hidden}.cta-inner{display:flex;align-items:center;justify-content:space-between;gap:30px;position:relative;z-index:1}.cta .eyebrow{color:#f8dfc9}.cta .eyebrow:before{background:#f8dfc9}.cta h2{font-size:clamp(36px,4vw,48px);line-height:1.08;margin:0 0 10px;color:#fffaf5}.cta p:last-child{margin:0;color:#f4ddd0;font-size:12px}.cta-mark{position:absolute;right:8%;top:-70px;font:260px/1 Georgia,serif;color:rgba(255,255,255,.08);transform:rotate(15deg)}
+    .faq{display:grid;grid-template-columns:.8fr 1.2fr;gap:70px}.faq-intro>p:last-child{color:#806d62;font-size:12px;line-height:1.8;margin-top:16px;max-width:300px}.faq-list details{border-bottom:1px solid var(--line);padding:18px 0}.faq-list summary{list-style:none;display:flex;justify-content:space-between;gap:20px;cursor:pointer;font-size:13px;font-weight:700;color:var(--cocoa)}.faq-list summary::-webkit-details-marker{display:none}.faq-list summary span{font-size:19px;color:var(--terra);font-weight:400;transition:transform .2s}.faq-list details[open] summary span{transform:rotate(45deg)}.faq-list details p{padding:12px 30px 0 0;color:#806d62;font-size:11px;line-height:1.85;margin:0}
+    .security-note{background:#f4eee7;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:22px 0}.security-inner{display:flex;align-items:center;gap:18px}.security-icon{width:42px;height:42px;flex:0 0 42px;border-radius:50%;display:grid;place-items:center;background:#e7d5c1;color:var(--cocoa);font-size:18px}.security-inner strong{font-size:12px}.security-inner p{font-size:10px;color:#806d62;margin:3px 0 0;line-height:1.7}
+    .site-footer{background:#2b1d19;color:#f6eee6;padding:55px 0 20px}.footer-top{display:grid;grid-template-columns:1fr 1.3fr;gap:70px;padding-bottom:40px}.brand-footer .brand-name{color:#fff7ed}.brand-footer .brand-name b{color:#d99a72}.brand-footer .brand-name small{color:#c4b1a4}.footer-about p{margin:18px 0 0;color:#c4b2a6;font-size:11px;max-width:260px;line-height:1.8}.footer-links{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}.footer-links strong{display:block;font-size:11px;margin-bottom:14px;color:#f8eadd}.footer-links a,.footer-links button{display:block;background:none;border:0;padding:0;color:#c6b4a8;font-size:10px;margin:9px 0;text-align:left}.footer-links a:hover,.footer-links button:hover{color:#e6b68f}.footer-bottom{display:flex;justify-content:space-between;gap:20px;border-top:1px solid rgba(255,255,255,.13);padding-top:18px;color:#aa9588;font-size:9px}.legal-note{margin-top:18px;padding:13px 15px;background:rgba(255,255,255,.06);border-radius:10px;color:#c6b4a8;font-size:10px;line-height:1.7}
+    .modal-backdrop{position:fixed;inset:0;z-index:50;background:rgba(28,17,14,.68);display:grid;place-items:center;padding:20px;overflow:auto}.modal-backdrop[hidden]{display:none}.auth-modal{position:relative;width:min(100%,490px);max-height:min(92vh,800px);overflow:auto;background:var(--paper);border-radius:24px;padding:35px;box-shadow:0 25px 90px rgba(0,0,0,.25)}.modal-close{position:absolute;right:19px;top:15px;border:0;background:transparent;font-size:27px;color:#806d62}.modal-kicker{font:700 9px/1.4 Inter,system-ui,sans-serif;letter-spacing:.22em;color:var(--terra);margin:0 0 10px}.auth-modal h2{font-size:36px;margin:0 0 8px}.modal-intro{font-size:11px;color:#806d62;margin-bottom:20px}.auth-switch{display:grid;grid-template-columns:1fr 1fr;background:#f1e8df;border-radius:999px;padding:4px;margin-bottom:22px}.auth-tab{border:0;background:transparent;border-radius:999px;padding:10px;color:#806d62;font-size:11px;font-weight:700}.auth-tab.active{background:white;color:var(--cocoa);box-shadow:0 3px 12px rgba(55,35,29,.08)}.auth-form label{display:block;font-size:10px;font-weight:700;color:#5c4940;margin-bottom:13px}.auth-form input{display:block;width:100%;margin-top:6px;padding:12px 13px;border:1px solid #e4d8cc;border-radius:10px;background:#fff;font-size:12px;outline:0}.auth-form input:focus{border-color:var(--terra);box-shadow:0 0 0 3px rgba(184,111,77,.12)}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}.auth-submit{width:100%;margin-top:5px}.forgot-row{text-align:right;margin:-4px 0 14px}.forgot-row button{border:0;background:none;padding:0;color:var(--terra);font-size:10px;font-weight:700}.form-notice{padding:12px;background:#f4eee7;border-radius:10px;color:#725e53;font-size:10px;line-height:1.7;margin:15px 0 0}.form-notice[hidden]{display:none}
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    @media(max-width:980px){.main-nav{gap:17px}.main-nav a{font-size:11px}.brand{min-width:190px}.hero-grid{gap:35px}.hero-visual{min-height:430px}.benefit{padding:18px 12px}.method-copy{padding:55px 42px}.access-grid,.faq{gap:35px}}
+    @media(max-width:760px){.course-grid{grid-template-columns:1fr 1fr}.container{width:min(var(--max),calc(100% - 36px))}.header-inner{height:72px}.menu-toggle{display:block;order:3}.header-actions{margin-left:auto}.header-actions .btn-quiet{display:none}.header-actions .btn{padding:10px 14px;font-size:10px}.brand{min-width:0}.brand-name{font-size:18px}.main-nav{display:none;position:absolute;left:0;right:0;top:72px;background:var(--cream);padding:12px 22px 22px;border-bottom:1px solid var(--line);box-shadow:0 16px 28px rgba(50,30,23,.08)}.main-nav.open{display:flex;flex-direction:column;align-items:stretch;gap:0}.main-nav a{padding:12px 5px;border-bottom:1px solid var(--line);font-size:12px}.hero{padding:48px 0 54px}.hero-grid{grid-template-columns:1fr;gap:34px}.hero-copy{max-width:600px}.hero-visual{min-height:430px;max-width:520px;width:100%;margin-inline:auto}.hero-photo{inset:0 18px 0 28px}.round-stamp{right:-2px}.benefit-grid{grid-template-columns:1fr 1fr}.benefit:nth-child(2){border-right:0}.benefit:nth-child(-n+2){border-bottom:1px solid #dfd0c1}.section{padding:70px 0}.section-head{display:block}.section-description{margin-top:15px}.catalog-shell{padding:22px}.catalog-top{align-items:stretch}.search{width:100%}.method{grid-template-columns:1fr}.method-photo{min-height:340px}.method-copy{padding:55px 28px}.access-grid,.faq{grid-template-columns:1fr;gap:25px}.access-section{padding:70px 0}.access-steps{padding:20px}.cta-inner{align-items:flex-start;flex-direction:column}.cta{padding:50px 0}.footer-top{grid-template-columns:1fr;gap:35px}.footer-links{gap:15px}.footer-bottom{flex-direction:column;gap:8px}.testimonials{padding:70px 0}}
+    @media(max-width:430px){.course-grid{grid-template-columns:1fr}.announcement{font-size:10px}.announcement a{display:block;margin:2px 0 0}.brand-name{font-size:16px}.brand-name small{font-size:7px}.header-actions .btn{font-size:9px;padding:9px 11px}.hero-buttons .btn{width:100%}.hero-visual{min-height:350px}.photo-caption{bottom:20px;padding:13px 15px}.round-stamp{width:82px;height:82px;font-size:9px}.benefit{padding:15px 10px;gap:9px}.benefit-number{font-size:19px}.benefit strong{font-size:10px}.benefit small{font-size:9px}.catalog-shell{padding:15px}.filters{gap:6px}.filter{font-size:10px;padding:8px 11px}.form-grid{grid-template-columns:1fr}.auth-modal{padding:28px 21px}.footer-links{grid-template-columns:1fr 1fr}.footer-links>div:last-child{grid-column:1/-1}}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+  </style>
+  <link rel="stylesheet" href="/app.css">
+</head>
+<body>
+  <div class="announcement">Une passion à cultiver, un savoir-faire à développer. <a href="#cours">Découvrir l'école <span aria-hidden="true">→</span></a></div>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="#accueil" aria-label="DULCES VICTORIA, accueil"><span class="brand-name">DULCES <b>VICTORIA</b><small>L'ÉCOLE VIDÉO DE PÂTISSERIE</small></span></a>
+      <button class="menu-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="main-nav">☰</button>
+      <nav class="main-nav" id="main-nav" aria-label="Navigation principale"><a href="#cours">Les cours</a><a href="#methode">Notre méthode</a><a href="#temoignages">Témoignages</a><a href="#faq">FAQ</a></nav>
+      <div class="header-actions"><button class="btn btn-quiet" type="button" data-open-auth="login">Connexion</button><button class="btn btn-dark" type="button" data-open-auth="signup">Rejoindre l'école <span aria-hidden="true">↗</span></button></div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="accueil">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">APPRENDRE · CRÉER · PROGRESSER</p>
+          <h1>Le plaisir de créer.<br><em>La fierté de réussir.</em></h1>
+          <p class="hero-intro">Entrez dans l'univers de DULCES VICTORIA et découvrez une manière guidée d'apprendre la pâtisserie. Observez les gestes, comprenez les étapes et pratiquez à votre rythme grâce aux formations vidéo.</p>
+          <div class="hero-buttons"><a class="btn btn-dark btn-large" href="#cours">Explorer les formations <span aria-hidden="true">→</span></a><button class="btn btn-outline btn-large" type="button" data-open-auth="signup">Créer mon espace <span aria-hidden="true">↗</span></button></div>
+          <div class="hero-note"><span class="note-icon" aria-hidden="true">✦</span><div><strong>Une école vidéo dédiée à la pâtisserie</strong><small>Des cours accessibles dans votre espace personnel</small></div></div>
+        </div>
+        <div class="hero-visual" aria-label="Illustration de pâtisserie">
+          <div class="hero-photo" role="img" aria-label="Gâteau pâtissier présenté dans une ambiance chaleureuse"></div>
+          <div class="photo-caption"><span>✧</span><strong>La précision du geste</strong><small>Apprendre, étape après étape</small></div>
+          <div class="round-stamp">CRÉER<br>AVEC<br>PASSION<br>✦</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="benefits" aria-label="Les points forts de la plateforme">
+      <div class="container benefit-grid">
+        <div class="benefit"><span class="benefit-number">01</span><div><strong>Des vidéos guidées</strong><small>Observer chaque étape</small></div></div>
+        <div class="benefit"><span class="benefit-number">02</span><div><strong>Un rythme flexible</strong><small>Apprendre à son rythme</small></div></div>
+        <div class="benefit"><span class="benefit-number">03</span><div><strong>Des gestes expliqués</strong><small>Pratiquer avec méthode</small></div></div>
+        <div class="benefit"><span class="benefit-number">04</span><div><strong>Un espace étudiant</strong><small>Retrouver ses formations</small></div></div>
+      </div>
+    </section>
+
+    <section class="section" id="cours">
+      <div class="container">
+        <div class="section-head">
+          <div><p class="eyebrow">LE CATALOGUE</p><h2>Choisissez votre<br><em>prochaine spécialité.</em></h2></div>
+          <p class="section-description">Les formations seront présentées avec leur catégorie, leur niveau, leur programme, leur durée et leur tarif dès validation des contenus par DULCES VICTORIA.</p>
+        </div>
+        <div class="catalog-shell">
+          <div class="catalog-top">
+            <div class="filters" role="group" aria-label="Filtrer les formations">
+              <button class="filter active" type="button" data-filter="all" aria-pressed="true">Tout voir</button>
+              <button class="filter" type="button" data-filter="cakes" aria-pressed="false">Gâteaux</button>
+              <button class="filter" type="button" data-filter="tartes" aria-pressed="false">Tartes & entremets</button>
+              <button class="filter" type="button" data-filter="techniques" aria-pressed="false">Techniques</button>
+            </div>
+            <label class="search"><span aria-hidden="true">⌕</span><span class="sr-only">Rechercher une formation</span><input id="course-search" type="search" placeholder="Rechercher une formation…" autocomplete="off"></label>
+          </div>
+          <div class="empty-state" id="catalog-empty" aria-live="polite">
+            <div class="empty-icon" aria-hidden="true">✧</div>
+            <h3>Le catalogue se prépare.</h3>
+            <p>Les fiches de formation apparaîtront ici dès réception et validation des titres, descriptions, catégories, niveaux, programmes, durées, prix et images de couverture.</p>
+            <button class="btn btn-outline" type="button" data-open-auth="signup">Créer mon espace étudiant <span aria-hidden="true">→</span></button>
+          </div>
+          <!-- Les fiches de cours validées seront ajoutées ici. Chaque .course-card devra porter data-category et data-title pour activer les filtres et la recherche. -->
+          <div id="course-grid" class="course-grid"></div>
+          <p class="catalog-footnote">Les prix et les modalités d'accès seront affichés sur chaque fiche de formation après confirmation.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="method" id="methode">
+      <div class="method-photo" role="img" aria-label="Pâtisseries artisanales préparées avec soin"></div>
+      <div class="method-copy">
+        <p class="eyebrow">NOTRE MÉTHODE</p>
+        <h2>Apprenez le geste.<br><em>Comprenez le résultat.</em></h2>
+        <p>La progression passe par l'observation, la pratique et la répétition. La plateforme est pensée pour accompagner ces étapes de façon simple.</p>
+        <div class="method-step"><span>01</span><div><strong>Regardez</strong><p>Suivez les démonstrations vidéo et observez les gestes.</p></div></div>
+        <div class="method-step"><span>02</span><div><strong>Pratiquez</strong><p>Mettez en application les techniques présentées dans les leçons.</p></div></div>
+        <div class="method-step"><span>03</span><div><strong>Progressez</strong><p>Retrouvez vos formations autorisées dans votre espace étudiant.</p></div></div>
+        <button class="btn btn-light" type="button" data-open-auth="signup">Rejoindre l'école <span aria-hidden="true">→</span></button>
+      </div>
+    </section>
+
+    <section class="access-section section" id="acces">
+      <div class="container access-grid">
+        <div class="access-intro"><p class="eyebrow">VOTRE ACCÈS AUX FORMATIONS</p><h2>Simple à suivre,<br><em>étape par étape.</em></h2><p>Après la création de votre compte, l'accès à une formation est activé lorsque le paiement a été vérifié par l'équipe DULCES VICTORIA.</p></div>
+        <div class="access-steps">
+          <div class="access-step"><span class="step-no">01</span><div><strong>Créez votre compte</strong><p>Renseignez les informations nécessaires pour ouvrir votre espace étudiant.</p></div></div>
+          <div class="access-step"><span class="step-no">02</span><div><strong>Choisissez votre formation</strong><p>Consultez la fiche de la formation, son programme et son tarif confirmé.</p></div></div>
+          <div class="access-step"><span class="step-no">03</span><div><strong>Effectuez le paiement avec Emmanuel Pay</strong><p>Suivez les modalités de paiement communiquées par DULCES VICTORIA.</p></div></div>
+          <div class="access-step"><span class="step-no">04</span><div><strong>Attendez la validation de votre accès</strong><p>Après vérification du paiement, l'administrateur active manuellement la formation sur votre compte.</p></div></div>
+          <div class="access-step"><span class="step-no">05</span><div><strong>Retrouvez vos leçons</strong><p>Connectez-vous à votre espace pour consulter les formations qui vous ont été attribuées.</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="testimonials" id="temoignages">
+      <div class="container">
+        <p class="eyebrow">ILS PARTAGERONT LEUR EXPÉRIENCE</p>
+        <h2>Les progrès se<br><em>racontent aussi.</em></h2>
+        <p>Les témoignages des apprenants seront publiés dans cet espace après réception et validation de leur contenu et de leur autorisation de diffusion.</p>
+        <span class="testimonial-note">Espace réservé aux témoignages validés</span>
+      </div>
+    </section>
+
+    <section class="cta">
+      <div class="container cta-inner">
+        <div><p class="eyebrow">VOTRE PARCOURS COMMENCE ICI</p><h2>Prêt·e à mettre<br>la main à la pâte ?</h2><p>Créez votre espace étudiant pour préparer votre apprentissage.</p></div>
+        <button class="btn btn-light btn-large" type="button" data-open-auth="signup">Créer mon compte <span aria-hidden="true">→</span></button>
+      </div><div class="cta-mark" aria-hidden="true">✳</div>
+    </section>
+
+    <section class="section" id="faq">
+      <div class="container faq">
+        <div class="faq-intro"><p class="eyebrow">BESOIN D'INFORMATIONS ?</p><h2>Les questions<br><em>essentielles.</em></h2><p>Retrouvez les premières informations sur le fonctionnement de l'école vidéo.</p></div>
+        <div class="faq-list">
+          <details><summary>Comment accéder aux vidéos ? <span aria-hidden="true">+</span></summary><p>Créez un compte puis connectez-vous. Vous pourrez consulter uniquement les formations qui auront été attribuées à votre compte par l'administration.</p></details>
+          <details><summary>Comment l'accès à une formation est-il activé ? <span aria-hidden="true">+</span></summary><p>Après votre paiement avec Emmanuel Pay, l'équipe vérifie le règlement puis active manuellement la formation sur votre compte étudiant.</p></details>
+          <details><summary>Les vidéos peuvent-elles être téléchargées ? <span aria-hidden="true">+</span></summary><p>Aucun bouton de téléchargement ne sera proposé. La plateforme doit utiliser un accès contrôlé aux flux vidéo et des liens temporaires. Toutefois, aucune solution web ne peut empêcher absolument un enregistrement de l'écran ou une copie réalisée par un moyen externe.</p></details>
+          <details><summary>Puis-je regarder les cours à mon rythme ? <span aria-hidden="true">+</span></summary><p>Les leçons seront accessibles depuis votre espace étudiant lorsque la formation correspondante aura été activée sur votre compte.</p></details>
+          <details><summary>Comment récupérer mon mot de passe ? <span aria-hidden="true">+</span></summary><p>Depuis la fenêtre de connexion, cliquez sur « Mot de passe oublié » pour recevoir un lien de réinitialisation par e-mail.</p></details>
+        </div>
+      </div>
+    </section>
+
+    <section class="security-note" aria-label="Information sur la sécurité des accès">
+      <div class="container security-inner"><span class="security-icon" aria-hidden="true">▣</span><div><strong>Un espace personnel avec des accès contrôlés</strong><p>La version en production devra vérifier les droits de chaque étudiant côté serveur avant de diffuser les vidéos. Cette protection dépend de la configuration du VPS et du développement serveur, pas uniquement de la page affichée ici.</p></div></div>
+    </section>
+
+    <section class="security-note" id="informations-legales">
+      <div class="container security-inner"><span class="security-icon" aria-hidden="true">i</span><div><strong>Informations légales et confidentialité</strong><p>Les conditions d'utilisation, la politique de confidentialité et les coordonnées officielles de contact devront être fournies ou validées par DULCES VICTORIA avant la mise en ligne définitive.</p></div></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-about"><a class="brand brand-footer" href="#accueil"><span class="brand-name">DULCES <b>VICTORIA</b><small>L'ÉCOLE VIDÉO DE PÂTISSERIE</small></span></a><p>Le plaisir d'apprendre, la joie de créer et la fierté de progresser.</p><div class="legal-note">Les coordonnées de contact et les liens officiels des réseaux sociaux seront ajoutés dès réception des informations validées.</div></div>
+        <div class="footer-links">
+          <div><strong>Explorer</strong><a href="#cours">Les formations</a><a href="#methode">Notre méthode</a><a href="#faq">Questions fréquentes</a></div>
+          <div><strong>Mon compte</strong><button type="button" data-open-auth="login">Connexion</button><button type="button" data-open-auth="signup">Créer un compte</button></div>
+          <div><strong>Informations</strong><a href="#informations-legales">Conditions d'utilisation</a><a href="#informations-legales">Confidentialité</a><a href="#informations-legales">Contact</a></div>
+        </div>
+      </div>
+      <div class="footer-bottom"><span>© <span id="year"></span> DULCES VICTORIA. Tous droits réservés.</span><span>L'école vidéo de pâtisserie.</span></div>
+    </div>
+  </footer>
+
+  <div class="modal-backdrop" id="auth-modal" hidden>
+    <section class="auth-modal" role="dialog" aria-modal="true" aria-labelledby="auth-title" aria-describedby="auth-intro">
+      <button class="modal-close" type="button" aria-label="Fermer la fenêtre">×</button>
+      <p class="modal-kicker">BIENVENUE DANS NOTRE ATELIER</p>
+      <h2 id="auth-title">Rejoignez l'école.</h2>
+      <p class="modal-intro" id="auth-intro">Créez votre espace étudiant.</p>
+      <div class="auth-switch" role="group" aria-label="Choisir le formulaire"><button class="auth-tab active" type="button" data-mode="signup" aria-pressed="true">Créer un compte</button><button class="auth-tab" type="button" data-mode="login" aria-pressed="false">Connexion</button></div>
+      <form class="auth-form" id="auth-form">
+        <div id="signup-fields">
+          <div class="form-grid">
+            <label>Nom complet<input type="text" name="name" maxlength="120" autocomplete="name" placeholder="Votre nom et prénom" required></label>
+            <label>Téléphone<input type="tel" name="telephone" maxlength="40" autocomplete="tel" placeholder="Votre numéro" required></label>
+          </div>
+          <label>Pays<input type="text" name="country" maxlength="100" autocomplete="country-name" placeholder="Votre pays" required></label>
+        </div>
+        <label>Adresse e-mail<input type="email" name="email" maxlength="254" autocomplete="email" placeholder="vous@exemple.com" required></label>
+        <label>Mot de passe<input type="password" name="password" autocomplete="new-password" minlength="8" placeholder="8 caractères minimum" required></label>
+        <div class="forgot-row" id="forgot-row" hidden><button type="button" id="forgot-password">Mot de passe oublié ?</button></div>
+        <button class="btn btn-dark auth-submit" type="submit" id="auth-submit">Créer mon espace <span aria-hidden="true">→</span></button>
+        <p class="form-notice" id="form-notice" role="status">Vos informations servent à créer et sécuriser votre espace étudiant.</p>
+      </form>
+    </section>
+  </div>
+
+  <script type="module" src="/app.js"></script>
+</body>
+</html>

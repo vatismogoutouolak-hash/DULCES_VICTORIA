@@ -1,0 +1,83 @@
+rules_version = '2';
+// users: private profile, bounded strings, immutable identity/creation time.
+// admins: trusted Admin SDK provisioned membership; no client writes.
+// courses: public published metadata only. lessons: private enrolled content.
+// enrollments/{uid_courseId}: admin managed access, immutable relationship.
+service cloud.firestore {
+ match /databases/{database}/documents {
+  function signed() { return request.auth != null; }
+  function own(uid) { return signed() && request.auth.uid == uid; }
+  function active() { return signed() && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.status == 'active'; }
+  function admin() { return active() && exists(/databases/$(database)/documents/admins/$(request.auth.uid)); }
+  function str(v,n) { return v is string && v.size() > 0 && v.size() <= n; }
+  function userValid(d) {
+   return d.keys().hasAll(['name','email','telephone','country','role','status','createdAt','updatedAt']) && d.keys().hasOnly(['name','email','telephone','country','role','status','createdAt','updatedAt'])
+    && str(d.name,120) && str(d.email,254) && str(d.telephone,40) && str(d.country,100)
+    && d.role in ['student','admin'] && d.status in ['active','suspended'] && d.createdAt is timestamp && d.updatedAt == request.time;
+  }
+  function courseValid(d) {
+   return d.keys().hasAll(['title','description','category','level','duration','price','image','status','createdAt','updatedAt']) && d.keys().hasOnly(['title','description','category','level','duration','price','image','status','createdAt','updatedAt'])
+    && str(d.title,200) && str(d.description,10000) && str(d.category,80) && str(d.level,80) && str(d.duration,80)
+    && (d.price == null || (d.price is number && d.price >= 0 && d.price <= 100000000)) && d.image is string && d.image.size() <= 2048
+    && d.status in ['published','hidden','disabled'] && d.createdAt is timestamp && d.updatedAt == request.time;
+  }
+  function enrolled(cid) { return active() && get(/databases/$(database)/documents/enrollments/$(request.auth.uid + '_' + cid)).data.status == 'active' && get(/databases/$(database)/documents/courses/$(cid)).data.status == 'published'; }
+  function lessonValid(d) {
+   return d.keys().hasAll(['title','module','order','duration','videoAssetId','createdAt','updatedAt']) && d.keys().hasOnly(['title','module','order','duration','videoAssetId','createdAt','updatedAt'])
+    && str(d.title,200) && str(d.module,200) && d.order is int && d.order >= 0 && d.order <= 10000 && str(d.duration,80)
+    && str(d.videoAssetId,128) && d.videoAssetId.matches('^[a-zA-Z0-9_-]+$') && d.createdAt is timestamp && d.updatedAt == request.time;
+  }
+  function enrollmentValid(d,id) {
+   return d.keys().hasAll(['userId','courseId','status','createdAt','updatedAt']) && d.keys().hasOnly(['userId','courseId','status','createdAt','updatedAt'])
+    && str(d.userId,128) && str(d.courseId,128) && id == d.userId + '_' + d.courseId && d.status in ['active','revoked']
+    && exists(/databases/$(database)/documents/users/$(d.userId)) && exists(/databases/$(database)/documents/courses/$(d.courseId)) && d.createdAt is timestamp && d.updatedAt == request.time;
+  }
+  // Site overrides: three bounded JSON pages, optional four hex colors.
+  // Only publication is public. Active administrators own all CMS writes.
+  function cmsColor(d,key) {
+   return !(key in d) || (d[key] is string && d[key].matches('^#[a-fA-F0-9]{6}$'));
+  }
+  function siteContentValid(d) {
+   return d.keys().hasAll(['pages','theme','updatedAt','updatedBy'])
+    && d.keys().hasOnly(['pages','theme','updatedAt','updatedBy'])
+    && d.pages is map && d.pages.keys().hasAll(['home','student','admin'])
+    && d.pages.keys().hasOnly(['home','student','admin'])
+    && d.pages.home is string && d.pages.home.size() <= 250000
+    && d.pages.student is string && d.pages.student.size() <= 250000
+    && d.pages.admin is string && d.pages.admin.size() <= 250000
+    && d.theme is map && d.theme.keys().hasOnly(['cocoa','terra','cream','ink'])
+    && cmsColor(d.theme,'cocoa') && cmsColor(d.theme,'terra')
+    && cmsColor(d.theme,'cream') && cmsColor(d.theme,'ink')
+    && str(d.updatedBy,128) && d.updatedBy == request.auth.uid
+    && d.updatedAt == request.time;
+  }
+  match /siteContent/{id} {
+   allow get: if id == 'published' || (id == 'draft' && admin());
+   allow list: if admin();
+   allow create, update: if id in ['draft','published'] && admin() && siteContentValid(request.resource.data);
+   allow delete: if id in ['draft','published'] && admin();
+  }
+  match /admins/{uid} { allow get: if own(uid); allow list,write: if false; }
+  match /users/{uid} {
+   allow read: if own(uid) || admin();
+   allow create: if own(uid) && userValid(request.resource.data) && request.resource.data.email == request.auth.token.email && request.resource.data.role == 'student' && request.resource.data.status == 'active' && request.resource.data.createdAt == request.time;
+   allow update: if userValid(request.resource.data) && request.resource.data.createdAt == resource.data.createdAt && request.resource.data.email == resource.data.email && request.resource.data.role == resource.data.role && (admin() || (own(uid) && active() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['name','telephone','country','updatedAt'])));
+  }
+  match /courses/{cid} {
+   allow read: if resource.data.status == 'published' || admin();
+   allow create: if admin() && courseValid(request.resource.data) && request.resource.data.createdAt == request.time;
+   allow update: if admin() && courseValid(request.resource.data) && request.resource.data.createdAt == resource.data.createdAt;
+   match /lessons/{lid} {
+    allow read: if admin() || enrolled(cid);
+    allow create: if admin() && exists(/databases/$(database)/documents/courses/$(cid)) && lessonValid(request.resource.data) && request.resource.data.createdAt == request.time;
+    allow update: if admin() && lessonValid(request.resource.data) && request.resource.data.createdAt == resource.data.createdAt;
+    allow delete: if admin();
+   }
+  }
+  match /enrollments/{id} {
+   allow read: if admin() || (active() && resource.data.userId == request.auth.uid);
+   allow create: if admin() && enrollmentValid(request.resource.data,id) && request.resource.data.createdAt == request.time;
+   allow update: if admin() && enrollmentValid(request.resource.data,id) && request.resource.data.createdAt == resource.data.createdAt && request.resource.data.userId == resource.data.userId && request.resource.data.courseId == resource.data.courseId;
+  }
+ }
+}

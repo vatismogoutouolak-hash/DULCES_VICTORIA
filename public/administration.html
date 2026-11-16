@@ -1,0 +1,25 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Administration — DULCES VICTORIA</title><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="/app.css"></head><body data-page="admin"><header class="site-header"><div class="container header-inner"><a class="brand" href="/"><span class="brand-name">DULCES <b>VICTORIA</b><small>L'ÉCOLE VIDÉO DE PÂTISSERIE</small></span></a><nav class="account-nav" aria-label="Mon compte"><a href="/">Les cours</a><a href="/espace.html">Mon espace</a><button class="btn btn-outline" data-open-auth="login">Connexion</button><button class="btn btn-outline" data-signout hidden>Déconnexion</button></nav></div></header><main class="container workspace"><p class="eyebrow">DULCES VICTORIA</p><h1>Administration</h1><p id="page-status" class="notice" role="status">Vérification de votre connexion…</p><div id="account-tools" hidden></div><div id="page-content" hidden></div></main>  <div class="modal-backdrop" id="auth-modal" hidden>
+    <section class="auth-modal" role="dialog" aria-modal="true" aria-labelledby="auth-title" aria-describedby="auth-intro">
+      <button class="modal-close" type="button" aria-label="Fermer la fenêtre">×</button>
+      <p class="modal-kicker">BIENVENUE DANS NOTRE ATELIER</p>
+      <h2 id="auth-title">Rejoignez l'école.</h2>
+      <p class="modal-intro" id="auth-intro">Créez votre espace étudiant.</p>
+      <div class="auth-switch" role="group" aria-label="Choisir le formulaire"><button class="auth-tab active" type="button" data-mode="signup" aria-pressed="true">Créer un compte</button><button class="auth-tab" type="button" data-mode="login" aria-pressed="false">Connexion</button></div>
+      <form class="auth-form" id="auth-form">
+        <div id="signup-fields">
+          <div class="form-grid">
+            <label>Nom complet<input type="text" name="name" maxlength="120" autocomplete="name" placeholder="Votre nom et prénom" required></label>
+            <label>Téléphone<input type="tel" name="telephone" maxlength="40" autocomplete="tel" placeholder="Votre numéro" required></label>
+          </div>
+          <label>Pays<input type="text" name="country" maxlength="100" autocomplete="country-name" placeholder="Votre pays" required></label>
+        </div>
+        <label>Adresse e-mail<input type="email" name="email" maxlength="254" autocomplete="email" placeholder="vous@exemple.com" required></label>
+        <label>Mot de passe<input type="password" name="password" autocomplete="new-password" minlength="8" placeholder="8 caractères minimum" required></label>
+        <div class="forgot-row" id="forgot-row" hidden><button type="button" id="forgot-password">Mot de passe oublié ?</button></div>
+        <button class="btn btn-dark auth-submit" type="submit" id="auth-submit">Créer mon espace <span aria-hidden="true">→</span></button>
+        <p class="form-notice" id="form-notice" role="status">Vos informations servent à créer et sécuriser votre espace étudiant.</p>
+      </form>
+    </section>
+  </div>
+
+<script type="module" src="/app.js"></script></body></html>

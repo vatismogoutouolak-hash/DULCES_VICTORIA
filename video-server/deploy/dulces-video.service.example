@@ -1,0 +1,23 @@
+[Unit]
+Description=Dulces Victoria private HLS video gateway
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=dulces-video
+Group=dulces-video
+WorkingDirectory=/opt/dulces-victoria/video-server
+EnvironmentFile=/etc/dulces-victoria/video.env
+ExecStart=/usr/bin/node src/server.js
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadOnlyPaths=/srv/dulces-victoria/private-hls
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target

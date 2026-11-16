@@ -1,24 +1,54 @@
-# DULCES VICTORIA
+# DULCES VICTORIA — Firebase et vidéos privées sur VPS
 
-Site de l’école de pâtisserie: catalogue des trois formations, programmes détaillés, recherche et filtres, espace étudiant et administration.
+Application avec inscription et connexion Firebase Authentication, catalogue
+Firestore, espace étudiant et administration privée. Les vidéos sont servies
+par un service Node.js séparé, prévu pour le futur VPS Hostinger. Le code ne
+requiert ni Firebase Storage, ni Cloud Functions, ni forfait Blaze.
 
-## Architecture
+## Démarrage
 
-Frontend HTML/CSS/JavaScript natif, navigation par URL fragment, sans compilation du navigateur. Backend Firebase Authentication, Firestore et Storage. API Vercel pour configuration publique et autorisation vidéo côté serveur. Aucun secret dans le navigateur.
+Node.js 22 ou 24, puis `npm ci` et `npm run dev -- --host 127.0.0.1`.
+La configuration Firebase web publique de production est fournie dans
+`.env.production`. Pour le développement, copier `.env.example` en `.env.local`
+et renseigner les valeurs publiques du projet.
 
-- `node scripts/build.mjs`: prépare les fichiers publics.
-- `npm test`: vérifications de configuration, de validation et de refus d’accès.
-- `README_BACKEND.md`: procédure d’activation Firebase et limites connues.
-- `.env.example`: noms des variables à configurer dans Vercel.
+`npm run build` produit `dist/` avec accueil, `/espace.html` et
+`/administration.html`. L'administration exige un compte Firebase actif et une
+entrée de confiance `admins/{uid}`. Aucun bouton navigateur ne peut promouvoir
+un étudiant. Voir `docs/OPERATIONS.md` avant migration ou déploiement.
 
-## État de livraison
+## État de validation au 16 novembre 2026
 
-Le catalogue reprend les programmes fournis par le client. Les tarifs, durées, coordonnées, conditions commerciales définitives et vidéos n’ont pas été fournis. Aucun achat ni résultat d’apprentissage n’est simulé. Le projet Firebase dédié `dulces-victoria-7cf8f` est créé sans Analytics. Email/Password et Firestore Belgique sont configurés; règles privées publiées. La diffusion vidéo exige encore le forfait Blaze, le stockage, les secrets serveur, le compte administrateur et les vidéos de test.
+- Compilation Vite réussie.
+- Règles Firestore: 8 tests d'émulateur réussis.
+- Service vidéo: 9 tests réussis, y compris suspension, révocation et liens copiés.
+- Migration et sauvegarde: 3 tests de transformation réussis.
+- Console du projet `dulces-victoria-7cf8f` accessible, forfait Spark confirmé,
+  base vide observée. Cela ne constitue pas un déploiement de cette version.
 
-Les demandes d’inscription sont vérifiées manuellement après accord commercial externe. Aucun encaissement intégré n’est activé. Le lecteur prend en charge MP4 et HLS avec proxy privé, jetons courts, contrôle des accès à chaque segment et filigrane visuel. La lecture réelle et les règles Firebase attendent un projet configuré et des vidéos de test. La limitation à une session et les sauvegardes automatisées ne sont pas implémentées.
+Cette version doit être déployée avec ses règles, puis testée de bout en bout
+avant ouverture. Le propriétaire administrateur reste à provisionner. Les vidéos
+réelles et le futur VPS ne sont pas encore raccordés; aucun paiement automatique
+n'est fourni. La MFA administrateur et la restauration complète en environnement
+isolé restent à valider. Les tests vidéo utilisent des services Firebase simulés;
+ils ne prouvent pas la lecture d'une vidéo de production sur Hostinger.
 
-Les photos de démonstration proviennent d’Unsplash et ne représentent pas les réalisations de la formatrice. Remplacer par les visuels propriétaires lors de leur réception.
+## Tests
 
-## Migration Hostinger préparée
+`npm ci --prefix tests/security`, puis
+`npx -y firebase-tools@latest emulators:exec --project demo-dulces --only firestore 'npm --prefix tests/security test'`.
 
-Voir `ops/hostinger/README.md`: serveur Node, stockage vidéo privé local, HLS, contrôle des droits et cookie de lecture lié au navigateur. Le déploiement distant est bloqué par l’accès Hostinger. Aucune installation, dépense ou bascule DNS n’a eu lieu. Firebase Auth/Firestore gratuit est conservé; Firebase Storage n’est pas nécessaire.
+`npm ci --prefix video-server && npm run test:video`.
+`node --test scripts/*.test.mjs`.
+
+## Hébergement et continuité
+
+Le frontend temporaire peut être hébergé sur Firebase Hosting ou Vercel pour
+tester les comptes. Pour les vidéos, déployer les fichiers `dist/` et le reverse
+proxy `/api/video/` sous le même domaine HTTPS du VPS, selon
+`video-server/README.md`. Les comptes et données restent dans Firebase si le VPS
+expire. Le site et les vidéos du VPS deviennent alors indisponibles. Conserver
+les vidéos originales et les sauvegardes hors de ce serveur.
+
+Ne jamais committer de clé privée, de fichier de compte de service, de jeton,
+de sauvegarde de données personnelles ou de fichier `.env` serveur.

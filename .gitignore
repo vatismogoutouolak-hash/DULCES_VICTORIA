@@ -1,9 +1,12 @@
 node_modules/
+dist/
 .env
 .env.local
 .env.*.local
-.vercel/
-.openai/
+*-debug.log
 *.log
-public/
-dist/
+backups/
+credentials/
+*.service-account.json
+.firebase/
+test-results/
