@@ -93,7 +93,7 @@ test('messages from an unrelated same-origin frame cannot modify the preview',as
  await apply();
  await page.evaluate(()=>{
   const attacker=document.createElement('iframe');attacker.src='about:blank';document.body.append(attacker);
-  attacker.contentWindow.eval("parent.document.querySelector('#test-preview').contentWindow.postMessage({type:'dv-cms-apply',value:{pages:{home:JSON.stringify({title:'FORGED TITLE'})},theme:{}}},location.origin)");
+  attacker.contentWindow.eval("parent.document.querySelector('#test-preview').contentWindow.postMessage({type:'dv-cms-apply',value:{pages:{home:JSON.stringify({title:'FORGED TITLE'})},theme:{}}},parent.location.origin)");
  });
  await delay(120);
  assert.equal(await frame.title(),snapshot.title);
