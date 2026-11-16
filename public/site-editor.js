@@ -27,7 +27,7 @@ function apply(data){
  if(r.kind==='image'){const safe=imageURL(value);if(safe){if(r.node.tagName==='IMG')r.node.src=safe;else r.node.style.backgroundImage='url("'+safe+'")';}}
  }
  for(const [id,s]of sections)s.node.hidden=values.hidden?.includes(id)||false;
- if(Array.isArray(values.order))for(const id of [...new Set([...values.order,...sections.keys()])]){const s=sections.get(id);if(s)s.node.parentNode.append(s.node);}
+ for(const id of [...new Set([...(Array.isArray(values.order)?values.order:[]),...sections.keys()])]){const s=sections.get(id);if(s)s.node.parentNode.append(s.node);}
  document.querySelectorAll('[data-cms-logo]').forEach(n=>n.remove());
  const logo=imageURL(values.logo||'');document.querySelectorAll('.brand').forEach(n=>{const text=n.querySelector('.brand-name');if(text)text.hidden=!!logo;if(logo){const img=document.createElement('img');img.dataset.cmsLogo='';img.src=logo;img.alt=values.logoAlt||'Logo';img.style.cssText='max-width:200px;max-height:70px;object-fit:contain';n.prepend(img);}});
  document.title=typeof values.title==='string'?values.title.slice(0,180):baseline.title;
