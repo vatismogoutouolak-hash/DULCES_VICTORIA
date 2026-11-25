@@ -126,3 +126,36 @@ body[data-public-page="formations.html"] .section-head {
   .course-hero { grid-template-columns: 1fr; }
   .course-hero > img { aspect-ratio: 16 / 10; }
 }
+
+/* Individual formation pages */
+.branded-course { --module-accent: #843f22; --module-tint: #f5e5d2; }
+.branded-course[data-module-theme="cacao"] { --module-accent: #603731; --module-tint: #eee0d8; }
+.branded-course[data-module-theme="framboise"] { --module-accent: #823c53; --module-tint: #f4e2e8; }
+.branded-course .module-cover { position: relative; margin: 0; border-radius: 1.7rem; overflow: hidden; background: var(--module-tint); }
+.branded-course .module-cover img { width: 100%; height: auto; aspect-ratio: 5/4; object-fit: cover; }
+.module-cover figcaption { position: absolute; inset: auto 0 0; padding: 3rem clamp(1rem, 4vw, 2.5rem) 1.4rem; background: linear-gradient(transparent, rgba(29,17,13,.91)); color: white; }
+.module-cover figcaption span { display: block; letter-spacing: .18em; font-weight: 750; font-size: .72rem; }
+.module-cover figcaption strong { display: block; max-width: 18ch; font: 400 clamp(1.65rem, 3vw, 2.75rem)/1.1 Georgia, serif; margin-top: .45rem; }
+.branded-course .course-buy { border-top: .3rem solid var(--module-accent); }
+.branded-course .eyebrow, .branded-course .syllabus-grid h3 { color: var(--module-accent); }
+.branded-course .course-summary { color: var(--ink-soft); line-height: 1.75; }
+.branded-course .course-buy .btn-dark { background: var(--module-accent); }
+.module-overview { margin-top: 2rem; display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.1rem; }
+.module-overview > div { background: var(--module-tint); border-radius: 1.1rem; padding: clamp(1rem, 3vw, 2rem); }
+.module-overview h2, .module-related h2 { margin: 0 0 .5rem; font-size: clamp(1.4rem, 3vw, 2.1rem); }
+.module-overview p { margin: 0; max-width: 50ch; }
+.branded-course .syllabus-grid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 285px), 1fr)); align-items: start; }
+.branded-course .syllabus-grid article { border-top: .2rem solid var(--module-accent); }
+.branded-course .syllabus-grid li { padding-block: .65rem; border-top: 1px solid var(--line); }
+.branded-course .syllabus-grid li strong, .branded-course .syllabus-grid li span { display: block; }
+.branded-course .syllabus-grid li strong { color: var(--cocoa); }
+.branded-course .syllabus-grid article > p { color: var(--ink-soft); }
+.module-related { margin-top: clamp(2.5rem, 6vw, 5rem); }
+.module-related > div { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+.module-related a { display: grid; gap: .3rem; padding: 1rem 1.2rem; background: var(--paper); border: 1px solid var(--line); border-radius: .9rem; }
+.module-related a:hover { color: var(--module-accent); border-color: var(--module-accent); }
+.module-related a span { font-size: .8rem; color: var(--module-accent); }
+@media (max-width: 650px) {
+  .module-overview, .module-related > div { grid-template-columns: 1fr; }
+  .branded-course .course-buy .btn-dark { width: 100%; }
+}

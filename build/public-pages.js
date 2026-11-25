@@ -1,3 +1,4 @@
+import { courseProfiles } from './course-profiles.js';
 import { readFileSync } from 'node:fs';
 import { load } from 'cheerio';
 import { publishedPrograms, offerPriceMarkup } from '../public/published-programs.js';
@@ -81,17 +82,56 @@ export function publicPages(template) {
           main.append('<div class="container breadcrumb"><a href="/">Accueil</a><span aria-hidden="true">/</span><a href="/formations.html">Formations</a></div>');
           if (page.course) {
             const course = page.course;
-            const detail = $('<div class="container course-detail"><div class="course-hero"><img width="1000" height="700" fetchpriority="high"><div class="course-buy"><p class="eyebrow"></p><h1></h1><p class="course-summary"></p><p class="detail-price"></p><button type="button" class="btn btn-dark btn-large" data-open-auth="signup">M’inscrire à cette formation →</button><p class="detail-access">Accès activé après vérification du paiement.</p><a href="/inscription.html">Consulter les modalités d’inscription</a></div></div><section class="course-syllabus"><h2>Au programme</h2><div class="syllabus-grid"></div></section></div>');
+            const profile = courseProfiles[course.id];
+            const detail = $(`
+              <div class="container course-detail branded-course">
+                <div class="course-hero">
+                  <figure class="module-cover">
+                    <img width="1000" height="700" fetchpriority="high">
+                    <figcaption><span>DULCES VICTORIA</span><strong></strong></figcaption>
+                  </figure>
+                  <div class="course-buy">
+                    <p class="eyebrow"></p><h1></h1><p class="course-summary"></p><p class="detail-price"></p>
+                    <button type="button" class="btn btn-dark btn-large" data-open-auth="signup">M’inscrire à cette formation →</button>
+                    <p class="detail-access">Accès activé après vérification du paiement.</p>
+                    <a href="/inscription.html">Consulter les modalités d’inscription</a>
+                  </div>
+                </div>
+                <section class="module-overview" aria-label="Objectif et public">
+                  <div><h2>Votre objectif</h2><p class="module-objective"></p></div>
+                  <div><h2>À qui s’adresse ce module ?</h2><p class="module-audience"></p></div>
+                </section>
+                <section class="course-syllabus"><h2>Au programme</h2><div class="syllabus-grid"></div></section>
+                <nav class="module-related" aria-label="Autres modules"><h2>Découvrez aussi</h2><div></div></nav>
+              </div>`);
+            detail.attr('data-module-theme', profile.theme);
+            $('meta[name="description"]').attr('content', profile.intro);
             detail.find('img').attr({ src: course.image, alt: course.alt });
-            detail.find('.eyebrow').text('Module ' + course.module + ' · Débutant');
+            detail.find('figcaption strong').text(profile.signature);
+            detail.find('.eyebrow').text('Module ' + course.module + ' · Débutant · Formation vidéo');
             detail.find('h1').text(course.title);
-            detail.find('.course-summary').text(course.description);
+            detail.find('.course-summary').text(profile.intro);
             detail.find('.detail-price').html(offerPriceMarkup());
-            for (const [name, items] of course.groups) {
-              const group = $('<article><h3></h3><ul></ul></article>');
+            detail.find('.module-objective').text(profile.objective);
+            detail.find('.module-audience').text(profile.audience);
+            for (const [index, [name, items]] of course.groups.entries()) {
+              const [summary, explanations] = profile.groups[index];
+              const group = $('<article><h3></h3><p></p><ul></ul></article>');
               group.find('h3').text(name);
-              for (const item of items) group.find('ul').append($('<li></li>').text(item));
+              group.find('p').text(summary);
+              for (const [itemIndex, item] of items.entries()) {
+                const row = $('<li><strong></strong><span></span></li>');
+                row.find('strong').text(item);
+                row.find('span').text(explanations[itemIndex]);
+                group.find('ul').append(row);
+              }
               detail.find('.syllabus-grid').append(group);
+            }
+            for (const other of publishedPrograms.filter(programme => programme.id !== course.id)) {
+              const link = $('<a><span></span><strong></strong></a>').attr('href', formationPath(other.id));
+              link.find('span').text('Module ' + other.module);
+              link.find('strong').text(other.title + ' →');
+              detail.find('.module-related > div').append(link);
             }
             main.append(detail);
           } else {
