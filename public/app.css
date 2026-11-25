@@ -159,3 +159,27 @@ body[data-public-page="formations.html"] .section-head {
   .module-overview, .module-related > div { grid-template-columns: 1fr; }
   .branded-course .course-buy .btn-dark { width: 100%; }
 }
+
+.module-enrolment {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: clamp(2rem, 5vw, 4rem);
+  padding: clamp(1.35rem, 4vw, 3rem);
+  border-radius: 1.5rem;
+  background: var(--module-accent);
+  color: #fffaf4;
+}
+.module-enrolment-brand { margin: 0 0 .65rem; font-weight: 750; font-size: .75rem; letter-spacing: .12em; text-transform: uppercase; }
+.module-enrolment h2 { font-size: clamp(1.65rem, 3.8vw, 3rem); line-height: 1.12; margin: 0 0 .8rem; }
+.module-enrolment-price { margin: 0; }
+.module-enrolment .offer-price strong, .module-enrolment .offer-price del { color: inherit; }
+.module-enrolment .offer-badge { color: var(--module-accent); background: var(--module-tint); }
+.module-enrolment .btn { background: #fffaf4; color: var(--module-accent); }
+.module-enrolment .btn:hover { background: var(--module-tint); }
+.module-enrolment .btn:focus-visible { outline: 2px solid #fffaf4; outline-offset: 4px; }
+@media (max-width: 650px) {
+  .module-enrolment { grid-template-columns: 1fr; }
+  .module-enrolment .btn { width: 100%; }
+}

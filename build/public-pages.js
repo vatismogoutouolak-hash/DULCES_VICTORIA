@@ -103,6 +103,10 @@ export function publicPages(template) {
                 </section>
                 <section class="course-syllabus"><h2>Au programme</h2><div class="syllabus-grid"></div></section>
                 <nav class="module-related" aria-label="Autres modules"><h2>Découvrez aussi</h2><div></div></nav>
+                <section class="module-enrolment" aria-label="Inscription à la formation">
+                  <div><p class="module-enrolment-brand"></p><h2></h2><p class="module-enrolment-price"></p></div>
+                  <button type="button" class="btn btn-large" data-open-auth="signup">M’inscrire à cette formation <span aria-hidden="true">→</span></button>
+                </section>
               </div>`);
             detail.attr('data-module-theme', profile.theme);
             $('meta[name="description"]').attr('content', profile.intro);
@@ -111,7 +115,9 @@ export function publicPages(template) {
             detail.find('.eyebrow').text('Module ' + course.module + ' · Débutant · Formation vidéo');
             detail.find('h1').text(course.title);
             detail.find('.course-summary').text(profile.intro);
-            detail.find('.detail-price').html(offerPriceMarkup());
+            detail.find('.detail-price, .module-enrolment-price').html(offerPriceMarkup());
+            detail.find('.module-enrolment-brand').text('Dulces Victoria · Module ' + course.module);
+            detail.find('.module-enrolment h2').text(course.title);
             detail.find('.module-objective').text(profile.objective);
             detail.find('.module-audience').text(profile.audience);
             for (const [index, [name, items]] of course.groups.entries()) {
