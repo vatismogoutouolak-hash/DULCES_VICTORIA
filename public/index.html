@@ -202,7 +202,13 @@
           <label>Pays<input type="text" name="country" maxlength="100" autocomplete="country-name" placeholder="Votre pays" required></label>
         </div>
         <label>Adresse e-mail<input type="email" name="email" maxlength="254" autocomplete="email" placeholder="vous@exemple.com" required></label>
-        <label>Mot de passe<input type="password" name="password" autocomplete="new-password" minlength="8" placeholder="8 caractères minimum" required></label>
+        <div class="password-field">
+          <label for="auth-password">Mot de passe</label>
+          <div class="password-input">
+            <input id="auth-password" type="password" name="password" autocomplete="new-password" minlength="8" placeholder="8 caractères minimum" required>
+            <button type="button" id="password-toggle" aria-controls="auth-password" aria-label="Afficher le mot de passe">Afficher</button>
+          </div>
+        </div>
         <div class="forgot-row" id="forgot-row" hidden><button type="button" id="forgot-password">Mot de passe oublié ?</button></div>
         <button class="btn btn-dark auth-submit" type="submit" id="auth-submit">Créer mon espace <span aria-hidden="true">→</span></button>
         <p class="form-notice" id="form-notice" role="status">Vos informations servent à créer et sécuriser votre espace étudiant.</p>

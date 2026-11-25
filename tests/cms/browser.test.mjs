@@ -23,7 +23,7 @@ before(async()=>{
   const timeout=setTimeout(()=>reject(Error('CMS preview did not announce readiness')),20000);
   const receive=e=>{if(e.origin===location.origin&&e.source===iframe.contentWindow&&e.data?.type==='dv-cms-ready'){clearTimeout(timeout);window.removeEventListener('message',receive);resolve(e.data.snapshot);}};
   window.addEventListener('message',receive);
-  iframe.src='/?cms-preview=1';document.body.append(iframe);
+  iframe.src='/apercu-contenu.html?cms-preview=1';document.body.append(iframe);
  }));
  frame=page.frames().find(f=>f!==page.mainFrame());
  assert.ok(frame);
@@ -110,4 +110,32 @@ test('malformed preview data cannot crash rendering or create active content',as
   assert.equal(await frame.title(),snapshot.title);
   assert.deepEqual(failures,[]);
  } finally {page.off('pageerror',capture);await apply();}
+});
+
+test('public navigation opens separate pages and the password toggle preserves the entry', async () => {
+ const visitor=await browser.newPage({viewport:{width:390,height:844},reducedMotion:'reduce'});
+ try {
+  await visitor.route('**/*',route=>new URL(route.request().url()).origin===origin?route.continue():route.abort());
+  await visitor.goto(origin);
+  assert.equal(await visitor.locator('#cours').count(),0);
+  await visitor.locator('.menu-toggle').click();
+  await visitor.locator('#main-nav a[href="/formations.html"]').click();
+  await visitor.waitForURL(origin+'/formations.html');
+  assert.equal(await visitor.locator('h1').count(),1);
+  assert.equal(await visitor.locator('#course-grid').count(),1);
+  assert.equal(await visitor.locator('#main-nav [aria-current="page"]').getAttribute('href'),'/formations.html');
+
+  await visitor.goto(origin+'/inscription.html');
+  await visitor.locator('.header-actions [data-open-auth="signup"]').click();
+  const input=visitor.locator('#auth-password');
+  await input.fill('test-password-123');
+  await visitor.getByRole('button',{name:'Afficher le mot de passe'}).click();
+  assert.equal(await input.getAttribute('type'),'text');
+  assert.equal(await input.inputValue(),'test-password-123');
+  await visitor.getByRole('button',{name:'Masquer le mot de passe'}).click();
+  assert.equal(await input.getAttribute('type'),'password');
+  assert.equal(await input.inputValue(),'test-password-123');
+ } finally {
+  await visitor.close();
+ }
 });
