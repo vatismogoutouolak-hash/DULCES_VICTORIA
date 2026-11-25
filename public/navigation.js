@@ -15,9 +15,15 @@ export const sectionRoutes = {
   '#espace': '/espace.html',
 };
 
+const knownProgrammes = ['chantilly', 'creme-au-beurre', 'gateaux-en-pot'];
+
+export function formationPath(id) {
+  return knownProgrammes.includes(id) ? '/formation-' + id + '.html' : '/formation.html?id=' + encodeURIComponent(id);
+}
+
 export function routeFor(href) {
   if (href.startsWith('#formation/')) {
-    return '/formations.html?formation=' + encodeURIComponent(href.slice(11));
+    return formationPath(href.slice(11));
   }
   return Object.hasOwn(sectionRoutes, href) ? sectionRoutes[href] : href;
 }

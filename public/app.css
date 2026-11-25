@@ -89,7 +89,40 @@ body[data-public-page="formations.html"] .section-head {
   .home-path ol { grid-template-columns: 1fr; gap: 1rem; }
   .home-programmes .section-head > a { margin-top: 1rem; }
 }
-.christmas-price { display: inline-flex; flex-wrap: wrap; gap: .25rem .5rem; align-items: baseline; font-weight: 400; }
-.christmas-price .christmas-label { flex-basis: 100%; color: #8b302a; font-weight: 750; }
-.christmas-price strong { color: var(--cocoa); font-size: 1.15em; }
-.christmas-price del { color: var(--ink-soft); }
+.offer-price { display: inline-flex; flex-wrap: wrap; gap: .45rem .75rem; align-items: baseline; font-weight: 500; }
+.offer-badge { display: inline-block; border-radius: 999px; padding: .18rem .65rem; background: #822e2d; color: #fff8f0; font-size: .82rem; font-weight: 800; letter-spacing: .02em; }
+.offer-price strong { color: var(--cocoa); font-size: 1.32rem; white-space: nowrap; }
+.offer-price del { color: var(--ink-soft); white-space: nowrap; }
+[data-public-page="formations.html"] #cours {
+  background: radial-gradient(ellipse at 10% 0%, #f2dfd0 0%, transparent 52%), var(--cream);
+}
+[data-public-page="formations.html"] .catalog-shell { border: 0; box-shadow: none; background: transparent; padding-inline: 0; }
+[data-public-page="formations.html"] .catalog-top { margin-bottom: 1.6rem; }
+[data-public-page="formations.html"] .course-grid { gap: clamp(1rem, 2.2vw, 1.8rem); }
+[data-public-page="formations.html"] .course-card { display: flex; flex-direction: column; overflow: hidden; background: var(--paper); }
+[data-public-page="formations.html"] .course-card[hidden] { display: none; }
+[data-public-page="formations.html"] .course-card img { width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; }
+[data-public-page="formations.html"] .course-body { display: flex; flex: 1; flex-direction: column; align-items: flex-start; padding: clamp(1rem, 2.3vw, 1.6rem); }
+[data-public-page="formations.html"] .course-body h3 { font: 400 clamp(1.4rem, 2.3vw, 2rem)/1.18 Georgia, serif; color: var(--cocoa); }
+.course-action { margin-top: auto; width: 100%; }
+.breadcrumb { display: flex; gap: .75rem; padding-block: 1.6rem; color: var(--ink-soft); font-size: .9rem; }
+.breadcrumb a:hover, .course-buy > a:hover { text-decoration: underline; }
+.course-detail { padding-bottom: clamp(3rem, 8vw, 7rem); }
+.course-hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .94fr); gap: clamp(1.25rem, 4vw, 3.5rem); align-items: center; }
+.course-hero > img { width: 100%; height: auto; aspect-ratio: 5 / 4; object-fit: cover; border-radius: 1.7rem; }
+.course-buy { padding: clamp(1.35rem, 4vw, 3rem); background: var(--paper); border: 1px solid var(--line); border-radius: 1.7rem; }
+.course-buy h1 { font-size: clamp(2.2rem, 4.5vw, 4.25rem); }
+.course-buy .detail-price { margin-block: 1.35rem; }
+.course-buy .detail-price strong { font-size: clamp(1.5rem, 3vw, 2.15rem); }
+.course-buy > a { color: var(--cocoa); font-size: .85rem; }
+.detail-access { margin-block: .7rem .2rem; font-size: .82rem; color: var(--ink-soft); }
+.course-syllabus { margin-top: clamp(2.5rem, 6vw, 5rem); }
+.course-syllabus h2 { font-size: clamp(2rem, 4vw, 3.5rem); }
+.syllabus-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); gap: 1rem; }
+.syllabus-grid article { padding: 1.4rem; border-radius: 1rem; border: 1px solid var(--line); background: var(--paper); }
+.syllabus-grid h3 { color: var(--cocoa); margin-bottom: .65rem; }
+.syllabus-grid ul { margin: 0; padding-inline-start: 1.25rem; color: var(--ink-soft); }
+@media (max-width: 760px) {
+  .course-hero { grid-template-columns: 1fr; }
+  .course-hero > img { aspect-ratio: 16 / 10; }
+}

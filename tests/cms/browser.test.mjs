@@ -126,9 +126,10 @@ test('public navigation opens separate pages and the password toggle preserves t
   assert.equal(await visitor.locator('#course-grid .course-card').count(),3);
   await visitor.getByRole('button',{name:'Gâteaux en pot & biscuits'}).click();
   assert.equal(await visitor.locator('#course-grid .course-card:visible').count(),1);
-  await visitor.getByRole('button',{name:'Voir la formation'}).click();
+  await visitor.getByRole('link',{name:'Voir le programme'}).click();
+  await visitor.waitForURL(origin+'/formation-gateaux-en-pot.html');
   assert.equal(await visitor.getByText('Madeleines',{exact:true}).count(),1);
-  await visitor.getByRole('button',{name:'Fermer',exact:true}).click();
+  assert.match(await visitor.locator('.detail-price').innerText(), /19\s990 FCFA/);
   assert.equal(await visitor.locator('#main-nav [aria-current="page"]').getAttribute('href'),'/formations.html');
 
   await visitor.goto(origin+'/inscription.html');

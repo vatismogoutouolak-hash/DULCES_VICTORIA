@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { load } from 'cheerio';
-import { publishedPrograms, christmasPriceMarkup } from '../public/published-programs.js';
-import { routeFor } from '../public/navigation.js';
+import { publishedPrograms, offerPriceMarkup } from '../public/published-programs.js';
+import { formationPath, routeFor } from '../public/navigation.js';
 
 export const pages = {
   'index.html': { sections: [0, 1, 6] },
@@ -9,6 +9,10 @@ export const pages = {
   'ecole.html': { sections: [3, 5], title: 'Notre école de pâtisserie', description: 'Découvrez la méthode Dulces Victoria pour apprendre les gestes de la pâtisserie à votre rythme.' },
   'inscription.html': { sections: [4, 6], title: 'Inscription et accès aux cours', description: 'Découvrez comment créer votre espace étudiant et accéder aux formations vidéo de Dulces Victoria.' },
   'aide.html': { sections: [7, 8, 9], title: 'Aide et informations', description: 'Retrouvez les réponses aux questions sur les comptes, les formations et les modalités d’accès.' },
+  ...Object.fromEntries(publishedPrograms.map(course => [formationPath(course.id).slice(1), {
+    sections: [], course, title: 'Module ' + course.module + ' — ' + course.title, description: course.description,
+  }])),
+  'formation.html': { sections: [], title: 'Programme de formation', description: 'Consultez le programme de votre formation.', dynamicCourse: true },
   'apercu-contenu.html': { preview: true },
 };
 
@@ -50,10 +54,10 @@ export function publicPages(template) {
           const featured = $('<section class="section container home-programmes"><div class="section-head"><div><p class="eyebrow">LES FORMATIONS</p><h2>Trois modules pour apprendre la pâtisserie</h2></div><a class="btn btn-outline" href="/formations.html">Voir le catalogue →</a></div><div class="course-grid"></div></section>');
           for (const course of publishedPrograms) {
             const card = $('<article class="course-card"><img loading="lazy" width="600" height="400"><div class="course-body"><p class="course-meta"></p><h3><a></a></h3><p class="programme-intro"></p><a class="programme-link">Voir le programme →</a></div></article>');
-            const url = '/formations.html?formation=' + encodeURIComponent(course.id);
+            const url = formationPath(course.id);
             card.find('img').attr({ src: course.image, alt: course.alt });
             card.find('.course-meta').text('Module ' + course.module);
-            card.find('.programme-intro').after($('<p></p>').html(christmasPriceMarkup()));
+            card.find('.programme-intro').after($('<p></p>').html(offerPriceMarkup()));
             card.find('h3 a').attr('href', url).text(course.title);
             card.find('.programme-intro').text(course.description);
             card.find('.programme-link').attr('href', url);
@@ -68,9 +72,31 @@ export function publicPages(template) {
           $('title').text(page.title + ' — Dulces Victoria');
           $('meta[name="description"]').attr('content', page.description);
           const heading = $('main h2').first();
-          const title = $('<h1 class="interior-title"></h1>').html(heading.html());
+          const title = $('<h1 class="interior-title"></h1>').html(heading.html() || '');
           if (heading.attr('data-cms-text')) title.attr('data-cms-text', heading.attr('data-cms-text'));
           heading.replaceWith(title);
+        }
+        if (page.course || page.dynamicCourse) {
+          const main = $('main');
+          main.append('<div class="container breadcrumb"><a href="/">Accueil</a><span aria-hidden="true">/</span><a href="/formations.html">Formations</a></div>');
+          if (page.course) {
+            const course = page.course;
+            const detail = $('<div class="container course-detail"><div class="course-hero"><img width="1000" height="700" fetchpriority="high"><div class="course-buy"><p class="eyebrow"></p><h1></h1><p class="course-summary"></p><p class="detail-price"></p><button type="button" class="btn btn-dark btn-large" data-open-auth="signup">M’inscrire à cette formation →</button><p class="detail-access">Accès activé après vérification du paiement.</p><a href="/inscription.html">Consulter les modalités d’inscription</a></div></div><section class="course-syllabus"><h2>Au programme</h2><div class="syllabus-grid"></div></section></div>');
+            detail.find('img').attr({ src: course.image, alt: course.alt });
+            detail.find('.eyebrow').text('Module ' + course.module + ' · Débutant');
+            detail.find('h1').text(course.title);
+            detail.find('.course-summary').text(course.description);
+            detail.find('.detail-price').html(offerPriceMarkup());
+            for (const [name, items] of course.groups) {
+              const group = $('<article><h3></h3><ul></ul></article>');
+              group.find('h3').text(name);
+              for (const item of items) group.find('ul').append($('<li></li>').text(item));
+              detail.find('.syllabus-grid').append(group);
+            }
+            main.append(detail);
+          } else {
+            main.append('<section class="container course-detail course-buy" id="public-formation"><h1>Programme de formation</h1><p role="status">Chargement de la formation…</p></section>');
+          }
         }
         if (!page.preview) {
           $('#main-nav').prepend('<a href="#accueil">Accueil</a>');
@@ -80,7 +106,7 @@ export function publicPages(template) {
             const link = $(node);
             const href = link.attr('href');
             link.attr('href', routeFor(href));
-            if (link.closest('#main-nav').length && routeFor(href) === (filename === 'index.html' ? '/' : '/' + filename)) link.attr('aria-current', 'page');
+            if (link.closest('#main-nav').length && routeFor(href) === (page.course || page.dynamicCourse ? '/formations.html' : filename === 'index.html' ? '/' : '/' + filename)) link.attr('aria-current', 'page');
           });
         }
         return $.html();
