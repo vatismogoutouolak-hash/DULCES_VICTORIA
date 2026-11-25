@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { load } from 'cheerio';
-import { publishedPrograms } from '../public/published-programs.js';
+import { publishedPrograms, christmasPriceMarkup } from '../public/published-programs.js';
 import { routeFor } from '../public/navigation.js';
 
 export const pages = {
@@ -52,7 +52,8 @@ export function publicPages(template) {
             const card = $('<article class="course-card"><img loading="lazy" width="600" height="400"><div class="course-body"><p class="course-meta"></p><h3><a></a></h3><p class="programme-intro"></p><a class="programme-link">Voir le programme →</a></div></article>');
             const url = '/formations.html?formation=' + encodeURIComponent(course.id);
             card.find('img').attr({ src: course.image, alt: course.alt });
-            card.find('.course-meta').text('Module ' + course.module + ' · 5 000 FCFA');
+            card.find('.course-meta').text('Module ' + course.module);
+            card.find('.programme-intro').after($('<p></p>').html(christmasPriceMarkup()));
             card.find('h3 a').attr('href', url).text(course.title);
             card.find('.programme-intro').text(course.description);
             card.find('.programme-link').attr('href', url);

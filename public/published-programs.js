@@ -12,5 +12,12 @@ export const publishedPrograms = courses.map(course => ({
   groups: course.groups,
   level: 'Débutant',
   duration: 'À confirmer',
-  price: 5000,
+  price: 19990,
 }));
+
+export const christmasOffer = { regular: 50000, promotional: 19990 };
+
+export function christmasPriceMarkup() {
+  const fcfa = value => value.toLocaleString('fr-FR') + ' FCFA';
+  return `<span class="christmas-price"><span class="christmas-label">Promo de Noël</span> <del>${fcfa(christmasOffer.regular)}</del> <strong>${fcfa(christmasOffer.promotional)}</strong> <span>par module</span></span>`;
+}

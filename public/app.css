@@ -89,3 +89,7 @@ body[data-public-page="formations.html"] .section-head {
   .home-path ol { grid-template-columns: 1fr; gap: 1rem; }
   .home-programmes .section-head > a { margin-top: 1rem; }
 }
+.christmas-price { display: inline-flex; flex-wrap: wrap; gap: .25rem .5rem; align-items: baseline; font-weight: 400; }
+.christmas-price .christmas-label { flex-basis: 100%; color: #8b302a; font-weight: 750; }
+.christmas-price strong { color: var(--cocoa); font-size: 1.15em; }
+.christmas-price del { color: var(--ink-soft); }
