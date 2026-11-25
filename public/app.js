@@ -31,7 +31,7 @@ function field(name,label,type='text',value='',extra=''){return `<label class="f
 function priceLabel(price){return price==null?'Tarif à confirmer':`${Number(price).toLocaleString('fr-FR')} FCFA`;}
 function profileFields(data){const limits={name:120,telephone:40,country:100};const values={};for(const [key,max] of Object.entries(limits)){const value=String(data.get(key)||'').trim();if(!value||value.length>max)throw Object.assign(new Error('invalid-profile'),{code:'invalid-profile'});values[key]=value;}return values;}
 function courseCard(c,button='Voir la formation',attr='data-course'){const img=safeImage(c.image);
- const action=attr==='data-course'?`<a class="btn btn-dark course-action" href="${esc(formationPath(c.programmeId||c.id))}">Voir le programme →</a>`:`<button class="btn btn-outline" ${attr}="${esc(c.id)}">${button} →</button>`;
+ const action=attr==='data-course'?`<div class="programme-actions"><a class="btn btn-outline programme-link" href="${esc(formationPath(c.programmeId||c.id))}">Voir le programme</a><button class="btn btn-dark" type="button" data-open-auth="signup">M’inscrire à cette formation</button></div>`:`<button class="btn btn-outline" ${attr}="${esc(c.id)}">${button} →</button>`;
  return `<article class="course-card" data-category="${esc(c.category)}" data-title="${esc(c.title)}">${img?`<img src="${esc(img)}" alt="${esc(c.alt||'')}" loading="lazy">`:''}<div class="course-body"><div class="course-meta">${c.module?'Module '+c.module+' · ':''}${esc(c.level)} · ${esc(c.duration)}</div><h3>${esc(c.title)}</h3><p>${esc(c.description).slice(0,240)}</p><p>${c.module?offerPriceMarkup():priceLabel(c.price)}</p>${action}</div></article>`;}
 
 // Accessible shared authentication modal; no credentials are stored by application code.
@@ -48,7 +48,10 @@ passwordToggle?.addEventListener('click',()=>setPasswordVisible(form.elements.pa
 function setMode(next){setPasswordVisible(false);mode=next==='login'?'login':'signup';const signup=mode==='signup';$('#auth-title').textContent=signup?"Rejoignez l’école.":'Ravi de vous retrouver.';$('#auth-intro').textContent=signup?'Créez votre espace étudiant.':'Connectez-vous pour retrouver vos formations.';$('#signup-fields').hidden=!signup;$('#forgot-row').hidden=signup;for(const n of ['name','telephone','country'])form.elements[n].required=signup;form.elements.password.autocomplete=signup?'new-password':'current-password';$('#auth-submit').textContent=signup?'Créer mon espace →':'Me connecter →';$$('.auth-tab').forEach(b=>{b.classList.toggle('active',b.dataset.mode===mode);b.setAttribute('aria-pressed',String(b.dataset.mode===mode));});notice.textContent=configured?'Vos informations servent à sécuriser votre espace personnel.':'Les inscriptions ne sont pas encore ouvertes. Réessayez prochainement.';$('#auth-submit').disabled=!serviceReady;}
 function openAuth(next='login'){if(user&&profile?.status==='active'){location.href='/espace.html';return;}previousFocus=document.activeElement;setMode(next);modal.hidden=false;document.body.style.overflow='hidden';$('.modal-close',modal).focus();}
 function closeAuth(){setPasswordVisible(false);modal.hidden=true;document.body.style.overflow='';previousFocus?.focus();}
-$$('[data-open-auth]').forEach(b=>b.addEventListener('click',()=>openAuth(b.dataset.openAuth)));
+document.addEventListener('click',event=>{
+ const trigger=event.target.closest('[data-open-auth]');
+ if(trigger)openAuth(trigger.dataset.openAuth);
+});
 $$('.auth-tab').forEach(b=>b.addEventListener('click',()=>setMode(b.dataset.mode)));
 $('.modal-close',modal)?.addEventListener('click',closeAuth);modal?.addEventListener('click',e=>{if(e.target===modal)closeAuth();});
 document.addEventListener('keydown',e=>{if(modal?.hidden)return;if(e.key==='Escape')closeAuth();if(e.key==='Tab'){const controls=$$('button,input,a[href]',modal).filter(el=>!el.disabled&&el.getClientRects().length);const first=controls[0],last=controls.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last?.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first?.focus();}}});

@@ -54,7 +54,7 @@ export function publicPages(template) {
         if (filename === 'index.html') {
           const featured = $('<section class="section container home-programmes"><div class="section-head"><div><p class="eyebrow">LES FORMATIONS</p><h2>Trois modules pour apprendre la pâtisserie</h2></div><a class="btn btn-outline" href="/formations.html">Voir le catalogue →</a></div><div class="course-grid"></div></section>');
           for (const course of publishedPrograms) {
-            const card = $('<article class="course-card"><img loading="lazy" width="600" height="400"><div class="course-body"><p class="course-meta"></p><h3><a></a></h3><p class="programme-intro"></p><a class="programme-link">Voir le programme →</a></div></article>');
+            const card = $('<article class="course-card"><img loading="lazy" width="600" height="400"><div class="course-body"><p class="course-meta"></p><h3><a></a></h3><p class="programme-intro"></p><div class="programme-actions"><a class="btn btn-outline programme-link">Voir le programme</a><button class="btn btn-dark" type="button" data-open-auth="signup">M’inscrire à cette formation</button></div></div></article>');
             const url = formationPath(course.id);
             card.find('img').attr({ src: course.image, alt: course.alt });
             card.find('.course-meta').text('Module ' + course.module);

@@ -183,3 +183,10 @@ body[data-public-page="formations.html"] .section-head {
   .module-enrolment { grid-template-columns: 1fr; }
   .module-enrolment .btn { width: 100%; }
 }
+
+.home-programmes .course-grid { align-items: stretch; }
+.home-programmes .course-card { display: flex; flex-direction: column; }
+.home-programmes .course-body { display: flex; flex: 1; flex-direction: column; }
+.programme-actions { display: grid; grid-template-columns: 1fr; gap: .55rem; width: 100%; margin-top: auto; padding-top: .45rem; }
+.programme-actions .btn { min-height: 44px; width: 100%; text-align: center; text-decoration: none; }
+.programme-actions .btn:focus-visible { outline: 2px solid var(--terra); outline-offset: 3px; }
