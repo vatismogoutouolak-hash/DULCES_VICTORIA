@@ -11,7 +11,7 @@ export const pages = {
   'apercu-contenu.html': { preview: true },
 };
 
-const excluded = '#auth-modal,#page-content,#page-status,#account-tools,#course-grid,#catalog-empty,.header-actions,.account-nav,script,style,[aria-hidden="true"]';
+const excluded = '[data-cms-exclude],#auth-modal,#page-content,#page-status,#account-tools,#course-grid,#catalog-empty,.header-actions,.account-nav,script,style,[aria-hidden="true"]';
 
 export function publicPages(template) {
   return {

@@ -69,3 +69,6 @@ body[data-public-page="formations.html"] .section-head {
 @media (prefers-reduced-motion: reduce) {
   .btn:hover, .btn:active { transform: none; }
 }
+.programme-group { margin-block: 1rem; }
+.programme-group h3 { font-size: 1rem; margin-bottom: 0.35rem; }
+.programme-group ul { padding-inline-start: 1.25rem; margin-top: 0; }

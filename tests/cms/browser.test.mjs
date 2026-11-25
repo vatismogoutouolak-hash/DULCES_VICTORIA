@@ -123,6 +123,12 @@ test('public navigation opens separate pages and the password toggle preserves t
   await visitor.waitForURL(origin+'/formations.html');
   assert.equal(await visitor.locator('h1').count(),1);
   assert.equal(await visitor.locator('#course-grid').count(),1);
+  assert.equal(await visitor.locator('#course-grid .course-card').count(),3);
+  await visitor.getByRole('button',{name:'Gâteaux en pot & biscuits'}).click();
+  assert.equal(await visitor.locator('#course-grid .course-card:visible').count(),1);
+  await visitor.getByRole('button',{name:'Voir la formation'}).click();
+  assert.equal(await visitor.getByText('Madeleines',{exact:true}).count(),1);
+  await visitor.getByRole('button',{name:'Fermer',exact:true}).click();
   assert.equal(await visitor.locator('#main-nav [aria-current="page"]').getAttribute('href'),'/formations.html');
 
   await visitor.goto(origin+'/inscription.html');

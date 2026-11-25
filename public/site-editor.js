@@ -4,7 +4,7 @@ const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 const page=document.body.dataset.page||'home', keys=['home','student','admin'];
 const publicPage=document.body.dataset.publicPage;
 const paths={home:'/apercu-contenu.html',student:'/espace.html',admin:'/administration.html'};
-const excluded='#auth-modal,#page-content,#page-status,#account-tools,#course-grid,#catalog-empty,.header-actions,.account-nav,script,style,[aria-hidden="true"]';
+const excluded='[data-cms-exclude],#auth-modal,#page-content,#page-status,#account-tools,#course-grid,#catalog-empty,.header-actions,.account-nav,script,style,[aria-hidden="true"]';
 const registry=new Map(), sections=new Map();
 let baseline, published={pages:{home:'{}',student:'{}',admin:'{}'},theme:{}},unsubscribe, editorGeneration=0;
 export function imageURL(value){if(typeof value!=='string')return '';return /^https:\/\/[^\s"'<>\\]+$/i.test(value)||/^data:image\/(?:webp|jpeg|png);base64,[A-Za-z0-9+/=]+$/.test(value)?value:'';}
