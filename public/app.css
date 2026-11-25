@@ -72,3 +72,20 @@ body[data-public-page="formations.html"] .section-head {
 .programme-group { margin-block: 1rem; }
 .programme-group h3 { font-size: 1rem; margin-bottom: 0.35rem; }
 .programme-group ul { padding-inline-start: 1.25rem; margin-top: 0; }
+.auth-form .password-input input { padding-inline-end: 3.25rem; }
+.password-input button { min-width: 44px; display: grid; place-items: center; }
+.password-input button .eye-slash { visibility: hidden; }
+.password-input button[data-visible="true"] .eye-slash { visibility: visible; }
+.home-programmes .course-card img { width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: cover; }
+.home-programmes h3 { font: 400 clamp(1.45rem, 2.7vw, 2rem)/1.15 Georgia, serif; color: var(--cocoa); }
+.home-programmes .course-meta { color: var(--cocoa); font-weight: 700; }
+.programme-link { display: inline-block; color: var(--cocoa); font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
+.home-path { padding-block: clamp(3.5rem, 8vw, 6.5rem); background: var(--sand); }
+.home-path h2 { font-size: clamp(2.25rem, 5vw, 3.5rem); line-height: 1.08; max-width: 18ch; }
+.home-path ol { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; padding-inline-start: 1.4rem; margin-block: 1.75rem; }
+.home-path li { padding-inline-start: .35rem; }
+.home-path li p { margin: .35rem 0 0; color: var(--ink-soft); }
+@media (max-width: 760px) {
+  .home-path ol { grid-template-columns: 1fr; gap: 1rem; }
+  .home-programmes .section-head > a { margin-top: 1rem; }
+}

@@ -104,7 +104,7 @@
           </div>
           <!-- Les fiches de cours validées seront ajoutées ici. Chaque .course-card devra porter data-category et data-title pour activer les filtres et la recherche. -->
           <div id="course-grid" class="course-grid"></div>
-          <p class="catalog-footnote">Les prix et les modalités d'accès seront affichés sur chaque fiche de formation après confirmation.</p>
+          <p class="catalog-footnote">Chaque module coûte 5 000 FCFA. Consultez la page Inscription pour connaître les modalités d’accès.</p>
         </div>
       </div>
     </section>
@@ -207,7 +207,13 @@
           <label for="auth-password">Mot de passe</label>
           <div class="password-input">
             <input id="auth-password" type="password" name="password" autocomplete="new-password" minlength="8" placeholder="8 caractères minimum" required>
-            <button type="button" id="password-toggle" aria-controls="auth-password" aria-label="Afficher le mot de passe">Afficher</button>
+            <button type="button" id="password-toggle" aria-controls="auth-password" aria-label="Afficher le mot de passe" title="Afficher le mot de passe">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6-10-6-10-6Z"/>
+                <circle cx="12" cy="12" r="2.6"/>
+                <path class="eye-slash" d="m3 3 18 18"/>
+              </svg>
+            </button>
           </div>
         </div>
         <div class="forgot-row" id="forgot-row" hidden><button type="button" id="forgot-password">Mot de passe oublié ?</button></div>

@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { load } from 'cheerio';
+import { publishedPrograms } from '../public/published-programs.js';
 import { routeFor } from '../public/navigation.js';
 
 export const pages = {
@@ -45,6 +46,21 @@ export function publicPages(template) {
           else $(node).remove();
         });
 
+        if (filename === 'index.html') {
+          const featured = $('<section class="section container home-programmes"><div class="section-head"><div><p class="eyebrow">LES FORMATIONS</p><h2>Trois modules pour apprendre la pâtisserie</h2></div><a class="btn btn-outline" href="/formations.html">Voir le catalogue →</a></div><div class="course-grid"></div></section>');
+          for (const course of publishedPrograms) {
+            const card = $('<article class="course-card"><img loading="lazy" width="600" height="400"><div class="course-body"><p class="course-meta"></p><h3><a></a></h3><p class="programme-intro"></p><a class="programme-link">Voir le programme →</a></div></article>');
+            const url = '/formations.html?formation=' + encodeURIComponent(course.id);
+            card.find('img').attr({ src: course.image, alt: course.alt });
+            card.find('.course-meta').text('Module ' + course.module + ' · 5 000 FCFA');
+            card.find('h3 a').attr('href', url).text(course.title);
+            card.find('.programme-intro').text(course.description);
+            card.find('.programme-link').attr('href', url);
+            featured.find('.course-grid').append(card);
+          }
+          $('.benefits').after(featured);
+          featured.after('<section class="home-path"><div class="container"><div><p class="eyebrow">VOTRE PARCOURS</p><h2>De votre premier cours à votre première création</h2></div><ol><li><strong>Choisissez votre module</strong><p>Consultez le programme et choisissez la spécialité qui vous intéresse.</p></li><li><strong>Créez votre espace étudiant</strong><p>Retrouvez les étapes d’inscription et les modalités de paiement.</p></li><li><strong>Pratiquez à votre rythme</strong><p>Après activation de votre accès, retrouvez les leçons dans votre espace.</p></li></ol><a class="btn btn-dark" href="/inscription.html">Consulter les étapes d’inscription →</a></div></section>');
+        }
         $('body').attr('data-public-page', filename);
         if (page.preview) $('head').append('<meta name="robots" content="noindex,nofollow">');
         if (page.title) {

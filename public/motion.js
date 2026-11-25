@@ -13,5 +13,5 @@ if (!reducedMotion.matches && 'IntersectionObserver' in window) {
     }
   }, { threshold: 0.12 });
 
-  document.querySelectorAll('.hero-copy,.hero-visual,.benefit-grid,.section-head,.method-copy,.access-steps,.faq-list,.cta-inner').forEach(element => observer.observe(element));
+  document.querySelectorAll('.home-programmes .course-card,.home-path ol,.hero-copy,.hero-visual,.benefit-grid,.section-head,.method-copy,.access-steps,.faq-list,.cta-inner').forEach(element => observer.observe(element));
 }
