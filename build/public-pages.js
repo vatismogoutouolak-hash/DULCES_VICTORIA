@@ -102,11 +102,11 @@ export function publicPages(template) {
                   <div><h2>À qui s’adresse ce module ?</h2><p class="module-audience"></p></div>
                 </section>
                 <section class="course-syllabus"><h2>Au programme</h2><div class="syllabus-grid"></div></section>
-                <nav class="module-related" aria-label="Autres modules"><h2>Découvrez aussi</h2><div></div></nav>
                 <section class="module-enrolment" aria-label="Inscription à la formation">
                   <div><p class="module-enrolment-brand"></p><h2></h2><p class="module-enrolment-price"></p></div>
                   <button type="button" class="btn btn-large" data-open-auth="signup">M’inscrire à cette formation <span aria-hidden="true">→</span></button>
                 </section>
+                <nav class="module-related" aria-label="Autres modules"><h2>Découvrez aussi</h2><div></div></nav>
               </div>`);
             detail.attr('data-module-theme', profile.theme);
             $('meta[name="description"]').attr('content', profile.intro);
